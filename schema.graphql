@@ -1,0 +1,458 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ActiveFor {
+  _id: String
+  enrollExpireTime: String
+  info: ActiveForKidInfo
+  isEnroll: Int
+  isRecurring: Int
+  memberType: String
+}
+
+type ActiveForKidInfo {
+  avatar: String
+  birthday: String
+  gender: String
+  name: String
+  username: String
+}
+
+type BalanceDetail {
+  balance: String
+  rate: Int
+}
+
+type ContentDescription {
+  isEnable: Int
+  value: String
+}
+
+type Created {
+  created: Boolean!
+}
+
+type DailyActivity {
+  dateName: String
+  shortDay: String
+  timeName: String
+  value: Float
+}
+
+type DeleteUserType {
+  reasons: [String]!
+}
+
+type EarningDetail {
+  balance: String
+  investments: BalanceDetail
+  sharing: BalanceDetail
+  spending: BalanceDetail
+}
+
+type EnrollObjectType {
+  invoiceId: String
+  payUrl: String
+}
+
+type FinanciallySmartGenerationTitle {
+  highlight: [String]!
+  value: String
+}
+
+type HeaderNotify {
+  actionTxt: String
+  isEnable: Int
+  value: String
+}
+
+type HomeType {
+  contentDescription: ContentDescription
+  contentTitle: FinanciallySmartGenerationTitle
+  elearningImg: String
+  headerNotify: HeaderNotify
+  mailCollectionTxt: String
+  sectionDidYouKnow: SectionDidYouKnow
+  sectionFinancialSuccess: SectionFinanciallySmartGeneration
+  sectionFinanciallySmartGeneration: SectionFinanciallySmartGeneration
+  sectionInteractiveAndFunLearning: SectionFinanciallySmartGeneration
+  sectionLearningJourneyMap: SectionLearningJourneyMap
+  sectionOurClientSay: SectionOurClientSay
+  sectionTryUnlimitedForFree: SectionTryUnlimited
+  seoMeta: SeoMeta
+  slogan: String
+}
+
+type InvoiceObjectType {
+  _id: String
+  amount: String
+  createdAt: String
+  fileUrl: String
+}
+
+type IsDeletedObjectType {
+  isDelete: Int
+}
+
+type IsUpdatedObjectType {
+  isUpdated: Boolean
+}
+
+type KidObjectType {
+  _id: String
+  avatar: String
+  birthday: String
+  name: String
+  status: String
+  username: String
+}
+
+type KidType {
+  _id: String
+  address: String
+  avatar: String
+  balance: Int
+  birthday: String
+  country: String
+  firstName: String
+  gender: String
+  lastName: String
+  memberType: String
+  name: String
+  username: String
+}
+
+type KidsByManager {
+  activeFor: ActiveFor
+  childs: [KidType]!
+}
+
+type LeaderBoard {
+  avatar: String
+  balance: Int
+  childId: String
+  name: String
+}
+
+type LearningDashboard {
+  availableLevels: [String]!
+  currentLevel: String
+  earningDetails: EarningDetail
+  leaderBoard: [LeaderBoard!]
+  levels: [Level!]
+  summary: Summary
+  weeklyActivities: [DailyActivity!]
+}
+
+type LearningJourneyData {
+  buttonTxt: String
+  content: String
+  image: String
+  title: String
+}
+
+type Lesson {
+  _id: String
+  name: String
+  order: Int
+  status: String
+}
+
+type LessonData {
+  data: [Lesson]!
+}
+
+type Level {
+  _id: String
+  id: String
+  key: String
+  name: String
+  order: Int
+}
+
+type LevelCertificate {
+  fileUrl: String
+  image: String
+  key: String
+  keyName: String
+  name: String
+  note: String
+  status: String
+}
+
+type LoggedUserType {
+  _id: String!
+  address: String
+  avatar: String
+  birthday: String
+  country: String
+  email: String
+  firstName: String
+  gender: String
+  id: String!
+  isRecurring: Int
+  lastName: String
+  memberType: String
+  name: String
+  paymentCard: PaymentCardType
+  role: String!
+  status: String
+  username: String!
+}
+
+type LoginType {
+  id: String!
+  role: String!
+  token: String!
+  username: String!
+}
+
+type MemberType {
+  billInfo: String
+  discount: String
+  freeTrial: String
+  key: String
+  name: String
+  price: String
+  totalPrice: String
+}
+
+type Mutation {
+  addPaymentCard(paymentMethodId: String!): PaymentCardObjectType!
+  attackLesson(lessonId: String!): Created!
+  cancelSubscriptionPlan(lang: String): SuccessObjectType!
+  changePasswordChild(kidId: String!, newPassword: String!): UpdatedObjectType!
+  changeWatchingKid(childId: String!): KidsByManager!
+  checkUsernameUnique(username: String!): UniqueObjectType!
+  createChild(avatar: String, birthday: String!, lang: String, name: String!, password: String!, username: String!): KidObjectType!
+  deleteChild(_id: String!): SuccessObjectType!
+  deletePaymentCard(_id: String!): SuccessObjectType!
+  deleteSelfAccount(adviseUs: String!, reason: String!): IsDeletedObjectType!
+  doLogin(
+    """Device Id"""
+    deviceId: String
+
+    """Firebase Token"""
+    fcmToken: String
+
+    """password"""
+    password: String!
+
+    """Device platform (ios|android)"""
+    platform: String
+
+    """Login type(kid|parent|....)"""
+    type: String
+
+    """username or email"""
+    username: String!
+  ): LoginType!
+  doSignUp(code: String!, deviceId: String, email: String!, fcmToken: String, name: String!, password: String!, pinCode: String, platform: String, type: String!): SignUpType!
+  enroll(enrollFor: String!, memberType: String!): EnrollObjectType!
+  manualAttachStripeCustomer: SuccessObjectType!
+  pushFcmToken(
+    deviceId: String!
+
+    """firebase token"""
+    fcmToken: String!
+
+    """Device platform (Android|Ios|Web)"""
+    platform: String!
+  ): PushFcmTokenType!
+  quickVerifyOtp(
+    """otp code"""
+    code: String!
+
+    """email"""
+    email: String!
+
+    """type"""
+    type: String!
+  ): VerifyOtpType!
+  registerOtp(action: String, email: String!, type: String!): RegisterOtp!
+  resetPassword(code: String!, email: String!, password: String!, type: String!): ResetPasswordType!
+  selfChangePassword(newPassword: String!, oldPassword: String!): IsUpdatedObjectType!
+  submitLesson(answerKey: String, lessonId: String!, questionId: String, score: Int, type: SubmitLessonEnum!): SubmitLesson!
+  updateChild(_id: String!, avatar: String, birthday: String, name: String, password: String): KidObjectType!
+  updateMe(address: String, avatar: URL, firstName: String, lastName: String): LoggedUserType!
+  updateMembership(memberType: String!): KidsByManager!
+  updatePrimaryCard(_id: String!): PaymentCardObjectType!
+  uploadFile(file: Upload!): UploadObjectType!
+  uploadFiles(files: [Upload]): UploadsObjectType!
+  verifyOtp(
+    """otp code"""
+    code: String!
+
+    """email"""
+    email: String!
+
+    """type"""
+    type: String!
+  ): VerifyOtpType!
+}
+
+type OurClientSayData {
+  content: String
+  image: String
+  name: String
+}
+
+type PaymentCardObjectType {
+  _id: String
+  brand: String
+  isPrimary: String
+  last4: String
+  memberType: String
+  paymentMethodId: String
+}
+
+type PaymentCardType {
+  memberType: String
+  paymentMethodId: String
+}
+
+type PrivatePlan {
+  commitmentLevel: [MemberType]!
+  isStandardCurrency: Int!
+}
+
+type PushFcmTokenType {
+  added: Boolean!
+}
+
+type Query {
+  dailyInspiring(lang: String): [String!]!
+  dashboardAlert(lang: String): [String!]!
+  home(lang: String!): HomeType!
+  initDeleteUser(lang: String): DeleteUserType!
+  kidLessonInfo(lessonId: String!): LessonData!
+  kids(lang: String): KidsByManager!
+  learningDashboard(lang: String!): LearningDashboard!
+  levelCertifications(lang: String): [LevelCertificate]!
+  listInvoice(lang: String): [InvoiceObjectType!]!
+  listLessons(lang: String, level: String!, levelId: String): LessonData!
+  me(lang: String): LoggedUserType!
+  paymentCards(lang: String): [PaymentCardObjectType!]!
+  privatePlan(lang: String!, switchToStandardCurrency: ID): PrivatePlan!
+}
+
+type RegisterOtp {
+  code: String
+  currentValid: String!
+  email: String!
+  expireTime: String!
+  id: String!
+  type: String!
+}
+
+type ResetPasswordType {
+  email: String!
+  token: String!
+  type: String!
+}
+
+type SectionDidYouKnow {
+  content: String
+  image: String
+  title: String
+}
+
+type SectionFinanciallySmartGeneration {
+  buttonTxt: String
+  content: String
+  image: String
+  title: FinanciallySmartGenerationTitle
+}
+
+type SectionLearningJourneyMap {
+  data: [LearningJourneyData]!
+  title: SectionLearningJourneyMapTitle
+}
+
+type SectionLearningJourneyMapTitle {
+  subTitle: String
+  title: String
+}
+
+type SectionOurClientSay {
+  content: String
+  data: [OurClientSayData]!
+  title: String
+}
+
+type SectionTryUnlimited {
+  content: String
+  data: [MemberType]!
+  title: FinanciallySmartGenerationTitle
+}
+
+type SeoMeta {
+  description: String
+  ogImage: String
+  title: String
+}
+
+type SignUpType {
+  email: String!
+  name: String!
+  role: String!
+  token: String!
+}
+
+type SubmitLesson {
+  earned: Int
+  rightAnswerId: String
+  rightAnswerKey: String
+  success: Boolean
+  totalEarnedLevel: Int
+  totalEarnedQuiz: Int
+}
+
+"""Submit Lesson Types"""
+enum SubmitLessonEnum {
+  game
+  introduction
+  question
+  story
+}
+
+type SuccessObjectType {
+  success: Int
+}
+
+type Summary {
+  completedLessons: Int
+  dayInTraining: Int
+  earning: String
+}
+
+"""URL scalar type"""
+scalar URL
+
+type UniqueObjectType {
+  isUnique: Int
+}
+
+type UpdatedObjectType {
+  isUpdated: Boolean
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type UploadObjectType {
+  url: String
+}
+
+type UploadsObjectType {
+  status: String
+  urls: [String]!
+}
+
+type VerifyOtpType {
+  errorCode: String
+  isValid: Boolean!
+  message: String
+  token: String!
+}
