@@ -2,7 +2,6 @@ import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RestCurrentUser } from './module/auth/decorator/loggedUser.decorator';
 import { LoggedUser } from './module/auth/passport/auth.type';
-import { AuthRest } from './module/auth/decorator/auth.decorator';
 import { Request, Response } from 'express';
 
 @Controller()

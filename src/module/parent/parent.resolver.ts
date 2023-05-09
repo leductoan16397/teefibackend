@@ -9,12 +9,11 @@ import { AuthGql } from '../auth/decorator/auth.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { GraphqlCurrentUser } from '../auth/decorator/loggedUser.decorator';
 import { LoggedUser } from '../auth/passport/auth.type';
-import { InvoiceObjectType } from './objectTYpe/invoce.objectType';
+import { InvoiceObjectType } from './objectTYpe/invoice.objectTypee';
 import { KidsByManager } from '../kid/objectType/kidsByManager.objectType';
 import { MEMBER_TYPE } from 'src/common/constant';
-import { BadRequestException, Req } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { EnrollObjectType } from './objectTYpe/enroll.objectTYpe';
-import { Request } from 'express';
 
 @Resolver()
 export class ParentResolver {

@@ -17,6 +17,15 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    "max-len": ["error", {
+      "code": 80,
+      "ignoreComments": true,
+      "ignoreStrings": true,
+      "ignoreUrls": true,
+      "ignoreRegExpLiterals": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "@typescript-eslint/no-empty-function": ["error", { allow: ["constructors"] }],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

@@ -9,7 +9,6 @@ import {
   BadGatewayException,
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { OTP_ACTION, otpSignupValidation } from 'src/common/constant';
 import * as moment from 'moment';
@@ -23,7 +22,6 @@ import { Parent } from '../database/schema/parent.schema';
 import { User, UserDocument } from '../database/schema/user.schema';
 import { detectCountryViaIP } from 'src/common/clientHelper';
 import { CustomerStripeService } from '../payment/stripe/service/customer.stripe.service';
-import { MailCollection } from '../database/schema/mailCollection.schema';
 import { DynamicError } from 'src/common/error';
 
 @Injectable()

@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  HttpException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
 import { Connection, Model } from 'mongoose';
@@ -448,7 +443,9 @@ export class UserService {
   }) {
     try {
       const u = await this.userModel
-        .findOne({ _id: loggedUser.id })
+        .findOne({
+          _id: loggedUser.id,
+        })
         .select('+hashPassword +salt');
 
       const verifyPassword = await u.verifyPassword(oldPassword);

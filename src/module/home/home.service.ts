@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Constant } from '../database/schema/constant.schema';
 import { Model } from 'mongoose';
@@ -150,7 +150,6 @@ export class HomeService {
     let totalDiscount: string | number;
 
     let rate = 1;
-    const isStandardCurrency = 1;
 
     let countryCurrency = detectCountryViaIP(params.clientIp);
     if (countryCurrency == 'vn') {

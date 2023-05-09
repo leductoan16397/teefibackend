@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { I18nContext } from 'nestjs-i18n';
 import { LoggedUser } from '../auth/passport/auth.type';
 import { UserRole } from 'src/common/enum';
