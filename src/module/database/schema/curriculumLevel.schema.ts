@@ -32,10 +32,9 @@ export class CurriculumLevel {
   certificateImage: string;
 
   @Prop({
-    type: mongoose.Schema.Types.ObjectId,
+    type: [mongoose.Schema.Types.ObjectId],
     ref: COLLECTION_NAME.CURRICULUM_LESSON,
     required: true,
-    immutable: true,
   })
   lessonIds: Types.ObjectId[];
 

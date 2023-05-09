@@ -38,7 +38,6 @@ class QuestionTracking {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    immutable: true,
   })
   questionId: Types.ObjectId;
 

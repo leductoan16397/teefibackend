@@ -9,9 +9,8 @@ import { Request, Response } from 'express';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @AuthRest()
   @Post()
-  getHello(@RestCurrentUser() user: LoggedUser): string {
+  getHello(@RestCurrentUser() user: LoggedUser) {
     return this.appService.getHello();
   }
 

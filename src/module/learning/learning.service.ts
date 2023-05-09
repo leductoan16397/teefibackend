@@ -207,7 +207,7 @@ export class LearningService {
       const previousLessonTracking = await this.curriculumLessonTrackingModel
         .findOne({
           kidId: kid._id,
-          curriculumLessonId: previousLesson._id,
+          curriculumLessonId: previousLesson?._id,
         })
         .session(session);
 

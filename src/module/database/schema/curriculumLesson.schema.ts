@@ -93,6 +93,9 @@ export class CurriculumLesson {
   @Prop({})
   value: string;
 
+  @Prop({})
+  level: string;
+
   @Prop({ required: true, min: 1 })
   order: number;
 
