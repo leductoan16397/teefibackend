@@ -4,11 +4,9 @@ import { COLLECTION_NAME } from 'src/common/constant';
 
 export type ConstantDocument = HydratedDocument<Constant>;
 
-
 export type ConstantLeanDoc = Constant & {
   _id: Types.ObjectId;
 };
-
 
 @Schema({
   collection: COLLECTION_NAME.CONSTANT,

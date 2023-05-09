@@ -13,6 +13,7 @@ import {
   UpdatedObjectType,
 } from '../parent/objectTYpe/paymentCard.objectType';
 import { KidObjectType } from './objectType/kid.objectType';
+import { LessonInfo } from './objectType/lessonInfo.objectype';
 
 @Resolver()
 export class KidResolver {
@@ -71,7 +72,7 @@ export class KidResolver {
     });
   }
 
-  @Query(() => LessonData)
+  @Query(() => LessonInfo)
   @AuthGql(UserRole.KID)
   async kidLessonInfo(
     @I18n() i18n: I18nContext,

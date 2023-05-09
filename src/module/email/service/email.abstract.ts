@@ -61,19 +61,20 @@ export abstract class SendGridService {
       isMultiple: true,
       attachments: this.attachments,
     };
-    this.sendGridService.sendMultiple(data)   
+    this.sendGridService
+      .sendMultiple(data)
       .then((rs) => {
-      console.log(
-        '🚀 ~ file: email.abstract.ts:28 ~ SendGridService ~ this.sendGridService.send ~ rs:',
-        rs[0].statusCode,
-      );
-    })
-    .catch((err) => {
-      console.log(
-        '🚀 ~ file: email.abstract.ts:36 ~ SendGridService ~ send ~ err:',
-        err,
-      );
-    });
+        console.log(
+          '🚀 ~ file: email.abstract.ts:28 ~ SendGridService ~ this.sendGridService.send ~ rs:',
+          rs[0].statusCode,
+        );
+      })
+      .catch((err) => {
+        console.log(
+          '🚀 ~ file: email.abstract.ts:36 ~ SendGridService ~ send ~ err:',
+          err,
+        );
+      });
   }
 
   abstract setDynamicData(data: any): void;

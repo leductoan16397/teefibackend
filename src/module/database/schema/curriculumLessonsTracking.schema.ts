@@ -6,15 +6,13 @@ import { Status } from 'src/common/enum';
 export type CurriculumLessonTrackingDocument =
   HydratedDocument<CurriculumLessonTracking>;
 
-  
 export type CurriculumLessonTrackingLeanDoc = CurriculumLessonTracking & {
   _id: Types.ObjectId;
 };
 
-
 @Schema({ _id: false })
 class IntroTracking {
-  @Prop({ enum: Status, default: Status.INPROGRESS })
+  @Prop({ enum: Status })
   status: Status;
 
   @Prop({ min: 0 })
@@ -85,13 +83,23 @@ export class CurriculumLessonTracking {
   })
   curriculumLessonId: Types.ObjectId;
 
-  @Prop({ type: IntroTrackingSchema })
+  @Prop({
+    type: IntroTrackingSchema,
+    default: {
+      status: Status.INPROGRESS,
+    },
+  })
   introduction: IntroTracking;
 
-  @Prop({ type: IntroTrackingSchema })
+  @Prop({
+    type: IntroTrackingSchema,
+    default: {
+      status: Status.UPCOMING,
+    },
+  })
   story: IntroTracking;
 
-  @Prop({ type: GameTrackingSchema })
+  @Prop({ type: GameTrackingSchema, default: {} })
   game: GameTracking;
 
   @Prop({ type: [QuestionTrackingSchema] })

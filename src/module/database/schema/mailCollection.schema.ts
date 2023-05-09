@@ -5,7 +5,6 @@ import { UserStatus } from 'src/common/enum';
 
 export type MailCollectionDocument = HydratedDocument<MailCollection>;
 
-
 export type MailCollectionLeanDoc = MailCollection & {
   _id: Types.ObjectId;
 };

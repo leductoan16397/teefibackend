@@ -1,9 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument , Types} from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 
 export type OtpCodeDocument = HydratedDocument<OtpCode>;
-
 
 export type OtpCodeLeanDoc = OtpCode & {
   _id: Types.ObjectId;

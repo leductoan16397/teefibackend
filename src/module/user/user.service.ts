@@ -259,7 +259,7 @@ export class UserService {
     username: string;
   }) {
     try {
-      const checkExist = await this.userModel.count({
+      const checkExist = await this.userModel.countDocuments({
         username: username.toLowerCase().trim(),
         isDeleted: false,
       });

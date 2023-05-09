@@ -557,8 +557,8 @@ export class ParentService {
         invoiceId: undefined,
       };
 
-      let aliasId = '',
-        prefix = this.invoiceModel.prefix();
+      let aliasId = '';
+      const prefix = this.invoiceModel.prefix();
 
       if (isFirstPay) {
         aliasId = await this.invoiceModel.generateTrialAliasId();

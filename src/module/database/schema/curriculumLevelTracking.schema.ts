@@ -6,11 +6,9 @@ import { Status } from 'src/common/enum';
 export type CurriculumLevelTrackingDocument =
   HydratedDocument<CurriculumLevelTracking>;
 
-  
 export type CurriculumLevelTrackingLeanDoc = CurriculumLevelTracking & {
   _id: Types.ObjectId;
 };
-
 
 @Schema({
   collection: COLLECTION_NAME.CURRICULUM_LEVEL_TRACKING,

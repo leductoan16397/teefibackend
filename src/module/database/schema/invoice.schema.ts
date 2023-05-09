@@ -8,6 +8,7 @@ import mongoose, {
 } from 'mongoose';
 import {
   COLLECTION_NAME,
+  ENV,
   INVOICE_STATUS,
   INVOICE_TYPE,
 } from 'src/common/constant';
@@ -94,9 +95,8 @@ export class Invoice extends Model {
   updatedAt?: Date;
 
   static prefix(type?: string) {
-    // TODO: add dev-prefix
-    if (type === 'trial') {
-      return 'TTF';
+    if (process.env.NODE_ENV !== ENV.prod) {
+      return `${process.env.NODE_ENV.toUpperCase()}-TF`;
     }
     return 'TF';
   }
@@ -104,7 +104,7 @@ export class Invoice extends Model {
   static async generateTrialAliasId() {
     const prefix = `${this.prefix('trial')}${moment().format('YYYY')}`;
 
-    let number = await this.find().count();
+    let number = await this.countDocuments();
     number += 1;
     return `${prefix}-${number}`;
   }
@@ -112,7 +112,7 @@ export class Invoice extends Model {
   static async generatePaidAliasId() {
     const prefix = `${this.prefix('paid')}${moment().format('YYYY')}`;
 
-    let number = await this.find().count();
+    let number = await this.countDocuments();
     number += 1;
     return `${prefix}-${number}`;
   }
@@ -161,7 +161,7 @@ InvoiceSchema.pre(
     });
     const invoiceLogService = appContext.get(InvoiceLogService);
 
-    const self: any = this;
+    const self: any = this as any;
     await invoiceLogService.doCreate({ self, options });
 
     return next();

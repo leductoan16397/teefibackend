@@ -8,7 +8,6 @@ export type CertificateLeanDoc = Certificate & {
   _id: Types.ObjectId;
 };
 
-
 @Schema({
   collection: COLLECTION_NAME.CERTIFICATE,
   timestamps: true,

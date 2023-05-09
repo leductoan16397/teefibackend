@@ -158,7 +158,7 @@ EnrollHistorySchema.pre(
     });
     const enrollHistoryLogService = appContext.get(EnrollHistoryLogService);
 
-    const self: any = this;
+    const self: any = this as any;
     await enrollHistoryLogService.doCreate({ self, options });
     return next();
   },

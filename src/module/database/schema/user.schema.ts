@@ -139,7 +139,7 @@ UserSchema.pre(
     });
     const userLogService = appContext.get(UserLogService);
 
-    const self: any = this;
+    const self: any = this as any;
 
     await userLogService.doCreate({ self, options });
     await appContext.close();

@@ -5,7 +5,7 @@ import { PaymentInvoiceEmailService } from './service/paymentInvoiceEmail.servic
 import { AWSModule } from '../aws/aws.module';
 
 @Module({
-  imports:[AWSModule],
+  imports: [AWSModule],
   providers: [EmailService, OtpEmailService, PaymentInvoiceEmailService],
   exports: [EmailService],
 })

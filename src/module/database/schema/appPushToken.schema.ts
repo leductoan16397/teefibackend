@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, ObjectId, Types} from 'mongoose';
+import mongoose, { HydratedDocument, ObjectId, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 import { User } from './user.schema';
 import { UserRole } from 'src/common/enum';
@@ -9,7 +9,6 @@ export type AppPushTokenDocument = HydratedDocument<AppPushToken>;
 export type AppPushTokenLeanDoc = AppPushToken & {
   _id: Types.ObjectId;
 };
-
 
 @Schema({
   collection: COLLECTION_NAME.APP_PUSH_TOKEN,

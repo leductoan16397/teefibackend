@@ -83,11 +83,9 @@ export class AuthService {
     action: string;
   }) {
     if (action === OTP_ACTION.signup) {
-      const checkUser = await this.userModel
-        .findOne({
-          username: email,
-        })
-        .count();
+      const checkUser = await this.userModel.findOne({
+        username: email,
+      });
 
       if (checkUser) {
         throw new BadRequestException(i18n.t('error.errorUserAlreadyExist'));

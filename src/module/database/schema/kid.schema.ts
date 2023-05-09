@@ -193,7 +193,7 @@ KidSchema.pre(
     });
     const kidLogService = appContext.get(KidLogService);
 
-    const self: any = this;
+    const self: any = this as any;
     await kidLogService.doCreate({ self, options });
     return next();
   },

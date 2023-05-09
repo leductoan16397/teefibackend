@@ -84,3 +84,9 @@ export const HOOK_EVENT = {
   customerSubscriptionCreated: 'customer.subscription.created',
   invoicePaid: 'invoice.paid',
 };
+
+export const ENV = {
+  prod: 'production',
+  dev: 'development',
+  stage: 'staging',
+};

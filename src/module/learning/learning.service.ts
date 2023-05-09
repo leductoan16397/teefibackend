@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { LoggedUser } from '../auth/passport/auth.type';
 import { I18nContext } from 'nestjs-i18n';
@@ -25,7 +26,7 @@ import {
 import { CurriculumLevelTracking } from '../database/schema/curriculumLevelTracking.schema';
 import { SubmitLessonEnum } from './type/learning.enum';
 import { Status } from 'src/common/enum';
-import lodash from 'lodash';
+import * as lodash from 'lodash';
 import { DynamicError } from 'src/common/error';
 
 @Injectable()
@@ -123,7 +124,7 @@ export class LearningService {
     i18n: I18nContext;
   }) {
     if (!level) {
-      throw new Error(i18n.t('error.levelNotFound'));
+      throw new BadRequestException(i18n.t('error.levelNotFound'));
     }
 
     if (level.order > 1) {
@@ -148,7 +149,7 @@ export class LearningService {
 
     // create level tracking
     const levelTracking = await this.curriculumLevelTrackingModel
-      .count({ kidId: kid._id, curriculumLevelId: level._id })
+      .countDocuments({ kidId: kid._id, curriculumLevelId: level._id })
       .session(session);
     if (!levelTracking) {
       const newLevelTracking = await new this.curriculumLevelTrackingModel({
@@ -177,7 +178,7 @@ export class LearningService {
     i18n: I18nContext;
   }) {
     if (!lesson) {
-      throw new Error(i18n.t('error.lessonNotFound'));
+      throw new BadRequestException(i18n.t('error.lessonNotFound'));
     }
 
     const levelOfLesson = await this.curriculumLevelModel
@@ -220,7 +221,7 @@ export class LearningService {
 
     // create lesson tracking
     const lessonTracking = await this.curriculumLessonTrackingModel
-      .count({ kidId: kid._id, curriculumLessonId: lesson._id })
+      .countDocuments({ kidId: kid._id, curriculumLessonId: lesson._id })
       .session(session);
     if (!lessonTracking) {
       const newLessonTracking = await new this.curriculumLessonTrackingModel({
@@ -262,7 +263,7 @@ export class LearningService {
     });
 
     if (!canAccessLesson) {
-      throw new Error(i18n.t('error.UnauthorizedAccess'));
+      throw new UnauthorizedException(i18n.t('error.UnauthorizedAccess'));
     }
 
     const lessonTracking = await this.curriculumLessonTrackingModel
@@ -409,18 +410,18 @@ export class LearningService {
     questionId: string | Types.ObjectId;
     answerKey: string;
   }) {
-    if (lessonTracking.introduction.status !== Status.UPCOMING) {
-      throw new Error(i18n.t('error.completePreviousPartFirst'));
+    if (lessonTracking.introduction.status !== Status.COMPLETED) {
+      throw new BadRequestException(i18n.t('error.completePreviousPartFirst'));
     }
 
     if (!questionId) {
-      throw new Error(
+      throw new BadRequestException(
         i18n.t('error.missingField', { args: { fieldName: 'questionId' } }),
       );
     }
 
     if (!answerKey) {
-      throw new Error(
+      throw new BadRequestException(
         i18n.t('error.missingField', { args: { fieldName: 'answerKey' } }),
       );
     }
@@ -428,7 +429,7 @@ export class LearningService {
     const { questions } = lesson;
 
     if (!questions.some((question) => question._id.toString() === questionId)) {
-      throw new Error(i18n.t('error.questionNotFound'));
+      throw new BadRequestException(i18n.t('error.questionNotFound'));
     }
 
     const { questions: questionTrackings } = lessonTracking;
@@ -449,7 +450,9 @@ export class LearningService {
         (ele) => ele.questionId.toString() === previousQuestion._id.toString(),
       ).status != Status.COMPLETED
     ) {
-      throw new Error(i18n.t('error.completePreviousQuestionFirst'));
+      throw new BadRequestException(
+        i18n.t('error.completePreviousQuestionFirst'),
+      );
     }
 
     // the index off questionSubmitting in lesson tracking
@@ -475,8 +478,12 @@ export class LearningService {
         earned = 0;
         success = false;
       } else {
-        questionTrackings[questionTrackingIndex].earned = lesson.story.earning;
-        earned = lesson.story.earning;
+        questionTrackings[questionTrackingIndex].earned = questions.find(
+          (question) =>
+            question._id.toString() ===
+            questionTrackings[questionTrackingIndex].questionId.toString(),
+        ).earning;
+        earned = questionTrackings[questionTrackingIndex].earned;
         success = true;
       }
 
@@ -570,7 +577,7 @@ export class LearningService {
         (question) => question.status !== Status.COMPLETED,
       )
     ) {
-      throw new Error(i18n.t('error.completePreviousPartFirst'));
+      throw new BadRequestException(i18n.t('error.completePreviousPartFirst'));
     }
 
     if (lessonTracking.story.status === Status.INPROGRESS) {
@@ -613,11 +620,13 @@ export class LearningService {
 
   async submitGame({ i18n, session, kid, lessonTracking, lesson, score }) {
     if (lessonTracking.story.status !== Status.COMPLETED) {
-      throw new Error(i18n.t('error.completePreviousPartFirst'));
+      throw new BadRequestException(i18n.t('error.completePreviousPartFirst'));
     }
 
     if (!score) {
-      throw new Error(i18n.t('error.missingField', { fieldName: 'score' }));
+      throw new BadRequestException(
+        i18n.t('error.missingField', { fieldName: 'score' }),
+      );
     }
 
     if (lessonTracking.game.status === Status.INPROGRESS) {
@@ -695,7 +704,7 @@ export class LearningService {
 
       const kid = await this.kidModel.findOne({ userId: loggedUser.id });
       if (!kid) {
-        throw new Error(i18n.t('error.errorUserExist'));
+        throw new BadRequestException(i18n.t('error.errorUserExist'));
       }
 
       const { lesson, lessonTracking } =

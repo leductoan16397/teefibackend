@@ -19,6 +19,12 @@ type ActiveForKidInfo {
   username: String
 }
 
+type AnswerInfo {
+  _id: String
+  key: String
+  value: String
+}
+
 type BalanceDetail {
   balance: String
   rate: Int
@@ -61,6 +67,13 @@ type FinanciallySmartGenerationTitle {
   value: String
 }
 
+type GameInfo {
+  earned: Int
+  earning: Int
+  src: String
+  status: String
+}
+
 type HeaderNotify {
   actionTxt: String
   isEnable: Int
@@ -82,6 +95,13 @@ type HomeType {
   sectionTryUnlimitedForFree: SectionTryUnlimited
   seoMeta: SeoMeta
   slogan: String
+}
+
+type IntroductionInfo {
+  earned: Int
+  earning: Int
+  src: Source
+  status: String
 }
 
 type InvoiceObjectType {
@@ -161,6 +181,20 @@ type Lesson {
 
 type LessonData {
   data: [Lesson]!
+}
+
+type LessonInfo {
+  _id: String
+  currentPart: String
+  curriculumLevelId: String
+  game: GameInfo
+  introduction: IntroductionInfo
+  name: String
+  order: Int
+  questions: [QuestionInfo]
+  status: String
+  story: IntroductionInfo
+  value: String
 }
 
 type Level {
@@ -326,7 +360,7 @@ type Query {
   dashboardAlert(lang: String): [String!]!
   home(lang: String!): HomeType!
   initDeleteUser(lang: String): DeleteUserType!
-  kidLessonInfo(lessonId: String!): LessonData!
+  kidLessonInfo(lessonId: String!): LessonInfo!
   kids(lang: String): KidsByManager!
   learningDashboard(lang: String!): LearningDashboard!
   levelCertifications(lang: String): [LevelCertificate]!
@@ -335,6 +369,17 @@ type Query {
   me(lang: String): LoggedUserType!
   paymentCards(lang: String): [PaymentCardObjectType!]!
   privatePlan(lang: String!, switchToStandardCurrency: ID): PrivatePlan!
+}
+
+type QuestionInfo {
+  _id: String
+  answerKey: String
+  answers: [AnswerInfo]
+  earned: Int
+  earning: Int
+  order: Int
+  question: String
+  status: String
 }
 
 type RegisterOtp {
@@ -398,6 +443,11 @@ type SignUpType {
   name: String!
   role: String!
   token: String!
+}
+
+type Source {
+  hashCode: String
+  videoId: String
 }
 
 type SubmitLesson {

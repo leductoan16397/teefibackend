@@ -149,7 +149,7 @@ ParentSchema.pre(
     });
     const parentLogService = appContext.get(ParentLogService);
 
-    const self: any = this;
+    const self: any = this as any;
 
     await parentLogService.doCreate({ self, options });
     return next();

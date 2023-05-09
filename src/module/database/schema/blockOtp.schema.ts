@@ -4,7 +4,6 @@ import { COLLECTION_NAME } from 'src/common/constant';
 
 export type BlockOTPDocument = HydratedDocument<BlockOTP>;
 
-
 export type BlockOTPLeanDoc = BlockOTP & {
   _id: Types.ObjectId;
 };

@@ -1,25 +1,29 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, {
-  HydratedDocument,
-  Types,
-  Document,
-} from 'mongoose';
+import mongoose, { HydratedDocument, Types, Document } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 
 export type CurriculumLessonDocument = HydratedDocument<CurriculumLesson>;
-
 
 export type CurriculumLessonLeanDoc = CurriculumLesson & {
   _id: Types.ObjectId;
 };
 
+@Schema({ _id: false })
+class Source {
+  @Prop({ type: String, required: true })
+  videoId: string;
+
+  @Prop({ type: String, required: true })
+  hashCode: string;
+}
+const SourceSchema = SchemaFactory.createForClass(Source);
 
 @Schema({ _id: false })
 class Introduction {
-  @Prop()
-  src: string;
+  @Prop({ type: SourceSchema, default: {} })
+  src: Source;
 
-  @Prop()
+  @Prop({ default: 50 })
   earning: number;
 }
 
@@ -30,7 +34,7 @@ class Game {
   @Prop()
   src: string;
 
-  @Prop()
+  @Prop({ default: 150 })
   earning: number;
 }
 
@@ -58,7 +62,7 @@ class Question {
   @Prop()
   rightAnswerKey: string;
 
-  @Prop()
+  @Prop({ default: 20 })
   earning: number;
 
   @Prop({ min: 1, required: true })
@@ -100,16 +104,16 @@ export class CurriculumLesson {
   })
   curriculumLevelId: Types.ObjectId;
 
-  @Prop({ type: IntroductionSchema })
+  @Prop({ type: IntroductionSchema, default: {} })
   introduction: Introduction;
 
-  @Prop({ type: IntroductionSchema })
+  @Prop({ type: IntroductionSchema, default: {} })
   story: Introduction;
 
-  @Prop({ type: GameSchema })
+  @Prop({ type: GameSchema, default: {} })
   game: Game;
 
-  @Prop({ type: [QuestionSchema] })
+  @Prop({ type: [QuestionSchema], default: [] })
   questions: Question[];
 
   @Prop()

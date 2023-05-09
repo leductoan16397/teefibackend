@@ -4,7 +4,6 @@ import { COLLECTION_NAME } from 'src/common/constant';
 
 export type FeedbackDocument = HydratedDocument<Feedback>;
 
-
 export type FeedbackLeanDoc = Feedback & {
   _id: Types.ObjectId;
 };

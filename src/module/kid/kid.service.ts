@@ -275,8 +275,8 @@ export class KidService {
         limit: 10,
       });
 
-      let currentLevel,
-        availableLevels = [];
+      let currentLevel;
+      const availableLevels = [];
 
       if (!kid) {
         currentLevel = levels[0];
@@ -297,7 +297,7 @@ export class KidService {
         earning: !!kid ? await this.getTotalEarned({ kid }) : 0,
         dayInTraining: 0,
         completedLessons: !!kid
-          ? await this.curriculumLessonTrackingModel.count({
+          ? await this.curriculumLessonTrackingModel.countDocuments({
               kidId: kid._id,
               status: 'completed',
             })
