@@ -10,6 +10,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { RootModule } from './module/root.module';
+import { LoggingPlugin } from './common/apolloLogging.service';
 
 @Module({
   imports: [
@@ -57,7 +58,7 @@ import { RootModule } from './module/root.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LoggingPlugin],
 })
 export class AppModule implements OnModuleInit {
   onModuleInit() {

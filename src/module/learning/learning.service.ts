@@ -278,12 +278,20 @@ export class LearningService {
     }
   }
 
-  async increaseKidBalance({ earning, kid, session }) {
-    if (!earning || earning === 0 || !!parseInt(earning)) {
+  async increaseKidBalance({
+    earning,
+    kid,
+    session,
+  }: {
+    earning: string | number;
+    kid: KidDocument;
+    session: ClientSession;
+  }) {
+    if (!earning || earning === 0 || !lodash.isInteger(earning)) {
       return;
     }
 
-    earning = parseInt(earning);
+    earning = parseInt(earning as string);
     const balance = kid.balance + earning;
 
     const investmentBalance = kid.asset.investment.balance + (earning * kid.asset.investment.ratio) / 100;
