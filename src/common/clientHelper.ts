@@ -13,7 +13,7 @@ export const detectCountryViaIP = (ip: string) => {
   }
 
   const timezone = getCountriesForTimezone(geo.timezone);
-  if (timezone && timezone[0]) {
+  if (!!timezone[0]) {
     return timezone[0].name.toLowerCase() || result;
   }
 

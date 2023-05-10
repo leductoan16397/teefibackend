@@ -46,8 +46,7 @@ export class ParentService {
     private readonly invoiceModel: Model<Invoice> & typeof Invoice,
 
     @InjectModel(EnrollHistory.name)
-    private readonly enrollHistoryModel: Model<EnrollHistory> &
-      typeof EnrollHistory,
+    private readonly enrollHistoryModel: Model<EnrollHistory> & typeof EnrollHistory,
 
     @InjectModel(PaymentCard.name)
     private readonly paymentCardModel: Model<PaymentCard>,
@@ -61,13 +60,7 @@ export class ParentService {
     private readonly kidService: KidService,
   ) {}
 
-  async paymentCards({
-    loggedUser,
-    i18n,
-  }: {
-    i18n: I18nContext;
-    loggedUser: LoggedUser;
-  }) {
+  async paymentCards({ loggedUser, i18n }: { i18n: I18nContext; loggedUser: LoggedUser }) {
     try {
       const student = await this.parentModel.findOne({ userId: loggedUser.id });
       const paymentCards = await this.paymentCardModel
@@ -95,13 +88,7 @@ export class ParentService {
     }
   }
 
-  async listInvoice({
-    loggedUser,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async listInvoice({ loggedUser, i18n }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       const parent = await this.parentModel.findOne({
         userId: loggedUser.id,
@@ -128,7 +115,7 @@ export class ParentService {
       console.log('tmpListInvoice', tmpListInvoice);
       const listInvoice = [];
 
-      if (tmpListInvoice && tmpListInvoice.length) {
+      if (tmpListInvoice?.length) {
         let tmp: any;
 
         for (const i in tmpListInvoice) {
@@ -136,16 +123,14 @@ export class ParentService {
             _id: tmpListInvoice[i]._id,
             amount: `${tmpListInvoice[i].currency}${tmpListInvoice[i].amount}`,
             fileUrl: null,
-            createdAt: moment(tmpListInvoice[i].createdAt).format(
-              'MMM DD, YYYY',
-            ),
+            createdAt: moment(tmpListInvoice[i].createdAt).format('MMM DD, YYYY'),
           };
 
           if (tmpListInvoice[i].aliasId) {
             const result = await this.stripeGateway.generateInvoice({
               invoiceAliasId: tmpListInvoice[i].aliasId,
             });
-            tmp.fileUrl = result && result.success ? result.url : null;
+            tmp.fileUrl = result?.success ? result?.url : null;
           }
 
           listInvoice.push(tmp);
@@ -169,26 +154,15 @@ export class ParentService {
   }) {
     const parent = await this.parentModel.findOne({ userId: loggedUser.id });
     try {
-      const studentCard = await this.paymentCardModel
-        .find({
-          userId: parent.userId,
-          userType: UserRole.PARENT,
-        })
-        .lean();
+      const studentCard = await this.paymentCardModel.find({ userId: parent.userId, userType: UserRole.PARENT }).lean();
 
-      const paymentMethod = await this.paymentMethodStripeService.retrieve(
-        paymentMethodId,
-      );
+      const paymentMethod = await this.paymentMethodStripeService.retrieve(paymentMethodId);
 
       if (!paymentMethod) {
         throw new Error(i18n.t('error.errorDetectCardInfo'));
       }
       if (!paymentMethod.customer) {
-        const attachToCustomer =
-          await this.paymentMethodStripeService.attachToCustomer(
-            paymentMethodId,
-            parent.stripeCusId,
-          );
+        await this.paymentMethodStripeService.attachToCustomer(paymentMethodId, parent.stripeCusId);
       } else if (paymentMethod.customer != parent.stripeCusId) {
         throw new Error(i18n.t('error.errorVerifyPaymentMethodInfo'));
       }
@@ -388,9 +362,7 @@ export class ParentService {
         let customer,
           stripeCusId = null;
         for (const i in parents) {
-          customer = await this.customerStripeService.getByEmail(
-            parents[i].email,
-          );
+          customer = await this.customerStripeService.getByEmail(parents[i].email);
 
           customer = customer ? customer.data[0] : false;
           if (customer) {
@@ -423,15 +395,7 @@ export class ParentService {
     }
   }
 
-  async activeChild({
-    loggedUser,
-    childId,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-    childId: string;
-  }) {
+  async activeChild({ loggedUser, childId, i18n }: { loggedUser: LoggedUser; i18n: I18nContext; childId: string }) {
     try {
       const parent = await this.parentModel.findOne({ userId: loggedUser.id });
       const kid = await this.kidModel.findOne({
@@ -513,10 +477,7 @@ export class ParentService {
 
     if (MEMBER_TYPE[enrollUser.memberType]) {
       if (!currentEnroll || currentEnroll.isRecurring == 1) {
-        throw new BadRequestException(
-          i18n.t('error.errorStudentStillMembership'),
-          enrollUser.memberType,
-        );
+        throw new BadRequestException(i18n.t('error.errorStudentStillMembership'), enrollUser.memberType);
       }
     }
 
@@ -590,13 +551,10 @@ export class ParentService {
       });
       //console.log("subscriptions >>>>>>", subscriptions);
 
-      historyData.stripeSubscriptionId = invoiceData.partnerTransactionId =
-        subscriptions.id;
+      historyData.stripeSubscriptionId = invoiceData.partnerTransactionId = subscriptions.id;
 
       //create invoice
-      const stripeInvoice = (
-        await this.invoiceStripeService.getRecentInvoice(subscriptions.id)
-      ).data[0];
+      const stripeInvoice = (await this.invoiceStripeService.getRecentInvoice(subscriptions.id)).data[0];
 
       const invoiceType = isFirstPay ? INVOICE_TYPE.trial : INVOICE_TYPE.paid;
 
@@ -627,58 +585,29 @@ export class ParentService {
 
       historyData.invoiceId = invoice._id;
 
-      if (currentEnroll && currentEnroll._id) {
-        await this.enrollHistoryModel
-          .deleteOne({ _id: currentEnroll._id })
-          .session(session);
+      if (currentEnroll?._id) {
+        await this.enrollHistoryModel.deleteOne({ _id: currentEnroll._id }).session(session);
       }
 
-      const enrollHistory = await new this.enrollHistoryModel({
-        ...historyData,
-        createdByUserType: 'system',
-      }).save({ session });
+      await new this.enrollHistoryModel({ ...historyData, createdByUserType: 'system' }).save({ session });
 
       if (kidId) {
         await this.kidModel.findOneAndUpdate(
-          {
-            _id: kidId,
-          },
-          {
-            memberType: historyData.memberType,
-            createdByUserType: 'system',
-          },
-          {
-            session: session,
-            enableLog: 1,
-          },
+          { _id: kidId },
+          { memberType: historyData.memberType, createdByUserType: 'system' },
+          { session: session, enableLog: 1 },
         );
 
         await this.parentModel.findOneAndUpdate(
-          {
-            _id: invoice.parentId,
-          },
-          {
-            watchingKidId: kidId,
-            createdByUserType: 'system',
-          },
-          {
-            session: session,
-            enableLog: 1,
-          },
+          { _id: invoice.parentId },
+          { watchingKidId: kidId, createdByUserType: 'system' },
+          { session: session, enableLog: 1 },
         );
       } else {
         await this.parentModel.findOneAndUpdate(
-          {
-            _id: invoice.parentId,
-          },
-          {
-            memberType: historyData.memberType,
-            createdByUserType: 'system',
-          },
-          {
-            session: session,
-            enableLog: 1,
-          },
+          { _id: invoice.parentId },
+          { memberType: historyData.memberType, createdByUserType: 'system' },
+          { session: session, enableLog: 1 },
         );
       }
       //move mail collection to potential customer
@@ -692,12 +621,11 @@ export class ParentService {
 
       if (
         !checkMailCollection ||
-        ![
-          MAIL_COLLECTION_TYPE.paidCustomer,
-          MAIL_COLLECTION_TYPE.paidAndLeaveCustomer,
-        ].includes(checkMailCollection.type)
+        ![MAIL_COLLECTION_TYPE.paidCustomer, MAIL_COLLECTION_TYPE.paidAndLeaveCustomer].includes(
+          checkMailCollection.type,
+        )
       ) {
-        const mailCollection = await this.mailCollectionModel.updateOne(
+        await this.mailCollectionModel.updateOne(
           {
             email: parent.email,
             userType: UserRole.PARENT,
@@ -729,13 +657,7 @@ export class ParentService {
     }
   }
 
-  async cancelSubscriptionPlan({
-    i18n,
-    loggedUser,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async cancelSubscriptionPlan({ i18n, loggedUser }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     const parent = await this.parentModel.findOne({ userId: loggedUser.id });
     try {
       const enrollHistory = await this.enrollHistoryModel
@@ -750,11 +672,9 @@ export class ParentService {
         throw new Error('No active subscription plan found');
       }
 
-      const cancelSubscription = await this.subscriptionStripeService.cancel(
-        enrollHistory.stripeSubscriptionId,
-      );
+      await this.subscriptionStripeService.cancel(enrollHistory.stripeSubscriptionId);
 
-      const foo = await this.enrollHistoryModel.findOneAndUpdate(
+      await this.enrollHistoryModel.findOneAndUpdate(
         {
           parentId: parent._id,
           kidId: parent.watchingKidId,
@@ -803,9 +723,7 @@ export class ParentService {
         throw new Error('The membership is same, no need to update');
       }
 
-      const membership = await this.membershipModel
-        .findOne({ key: memberType })
-        .lean();
+      const membership = await this.membershipModel.findOne({ key: memberType }).lean();
 
       const enrollHistory = await this.enrollHistoryModel
         .findOne({
@@ -816,14 +734,11 @@ export class ParentService {
 
       const subscriptionId = enrollHistory.stripeSubscriptionId;
 
-      const subscription = await this.subscriptionStripeService.retrieve(
-        subscriptionId,
-      );
+      const subscription = await this.subscriptionStripeService.retrieve(subscriptionId);
       const curPrice = subscription.items.data[0].price;
 
       const amount = membership.price * 100;
-      const intervalType =
-        membership.key == MEMBER_TYPE.monthly ? 'month' : 'year';
+      const intervalType = membership.key == MEMBER_TYPE.monthly ? 'month' : 'year';
 
       const newPrice = await this.priceStripeService.update({
         id: curPrice.id,
@@ -836,9 +751,7 @@ export class ParentService {
       });
 
       if (!newPrice) {
-        throw new Error(
-          'Unavailable to change membership now, please try again later',
-        );
+        throw new Error('Unavailable to change membership now, please try again later');
       }
 
       await this.enrollHistoryModel.findOneAndUpdate(

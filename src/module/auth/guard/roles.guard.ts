@@ -9,10 +9,10 @@ export class RolesGqlGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     if (requiredRoles.length === 0) {
       return true;
@@ -22,9 +22,7 @@ export class RolesGqlGuard implements CanActivate {
 
     const { user } = ctx.getContext().req;
 
-    return requiredRoles.some(
-      (role) => user.roles?.includes(role) || user.role === role,
-    );
+    return requiredRoles.some((role) => user.roles?.includes(role) || user.role === role);
   }
 }
 
@@ -33,18 +31,16 @@ export class RolesRestGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     if (requiredRoles.length === 0) {
       return true;
     }
     const { user } = context.switchToHttp().getRequest();
 
-    return requiredRoles.some(
-      (role) => user.roles?.includes(role) || user.role === role,
-    );
+    return requiredRoles.some((role) => user.roles?.includes(role) || user.role === role);
   }
 }

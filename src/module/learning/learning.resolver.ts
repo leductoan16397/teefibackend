@@ -21,10 +21,7 @@ export class LearningResolver {
     @GraphqlCurrentUser() user: LoggedUser,
     @Args('lang', { nullable: true }) lang?: string,
   ) {
-    console.log(
-      '🚀 ~ file: learning.resolver.ts:24 ~ LearningResolver ~ lang:',
-      lang,
-    );
+    console.log('🚀 ~ file: learning.resolver.ts:24 ~ LearningResolver ~ lang:', lang);
     return this.learningService.levelCertifications({ loggedUser: user, i18n });
   }
 

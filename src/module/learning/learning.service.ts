@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoggedUser } from '../auth/passport/auth.type';
 import { I18nContext } from 'nestjs-i18n';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
@@ -11,17 +6,12 @@ import { ClientSession, Connection, Model, Types } from 'mongoose';
 import { Parent } from '../database/schema/parent.schema';
 import { Kid, KidDocument } from '../database/schema/kid.schema';
 import { Certificate } from '../database/schema/certificate.schema';
-import {
-  CurriculumLevel,
-  CurriculumLevelDocument,
-} from '../database/schema/curriculumLevel.schema';
-import {
-  CurriculumLesson,
-  CurriculumLessonDocument,
-} from '../database/schema/curriculumLesson.schema';
+import { CurriculumLevel, CurriculumLevelDocument } from '../database/schema/curriculumLevel.schema';
+import { CurriculumLesson, CurriculumLessonDocument } from '../database/schema/curriculumLesson.schema';
 import {
   CurriculumLessonTracking,
   CurriculumLessonTrackingDocument,
+  QuestionTracking,
 } from '../database/schema/curriculumLessonsTracking.schema';
 import { CurriculumLevelTracking } from '../database/schema/curriculumLevelTracking.schema';
 import { SubmitLessonEnum } from './type/learning.enum';
@@ -53,13 +43,7 @@ export class LearningService {
     private readonly curriculumLessonTrackingModel: Model<CurriculumLessonTracking>,
   ) {}
 
-  async levelCertifications({
-    loggedUser,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async levelCertifications({ loggedUser, i18n }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       let kidId: Types.ObjectId;
 
@@ -86,9 +70,7 @@ export class LearningService {
       const certificates = await this.certificateModel.find({ kidId });
 
       const levelCertifications = levels.map((level) => {
-        const certificate = certificates.find(
-          (item) => item.levelId.toString() === level._id.toString(),
-        );
+        const certificate = certificates.find((item) => item.levelId.toString() === level._id.toString());
 
         let keyName = level.key[0].toUpperCase() + level.key.substring(1);
         keyName = keyName.replace(/([a-z](?=([A-Z]|[0-9])))/g, '$1 ');
@@ -98,9 +80,7 @@ export class LearningService {
           keyName: keyName,
           name: level.name,
           image: level.certificateImage,
-          note: certificate
-            ? 'Great Work! You passed all Lessons'
-            : 'You are almost done! Try your best!',
+          note: certificate ? 'Great Work! You passed all Lessons' : 'You are almost done! Try your best!',
           status: certificate ? 'done' : 'comingSoon',
           fileUrl: certificate?.fileUrl,
         };
@@ -139,10 +119,7 @@ export class LearningService {
         })
         .session(session);
 
-      if (
-        !previousLevelTracking ||
-        previousLevelTracking.status !== 'completed'
-      ) {
+      if (!previousLevelTracking || previousLevelTracking.status !== Status.COMPLETED) {
         return false;
       }
     }
@@ -181,9 +158,7 @@ export class LearningService {
       throw new BadRequestException(i18n.t('error.lessonNotFound'));
     }
 
-    const levelOfLesson = await this.curriculumLevelModel
-      .findById(lesson.curriculumLevelId)
-      .session(session);
+    const levelOfLesson = await this.curriculumLevelModel.findById(lesson.curriculumLevelId).session(session);
 
     const canAccessLevel = await this.canAccessLevel({
       kid,
@@ -211,10 +186,7 @@ export class LearningService {
         })
         .session(session);
 
-      if (
-        !previousLessonTracking ||
-        previousLessonTracking.status !== 'completed'
-      ) {
+      if (!previousLessonTracking || previousLessonTracking.status !== Status.COMPLETED) {
         return false;
       }
     }
@@ -276,15 +248,7 @@ export class LearningService {
     return { lessonTracking, lesson };
   }
 
-  async attackLesson({
-    i18n,
-    loggedUser,
-    lessonId,
-  }: {
-    i18n: I18nContext;
-    loggedUser: LoggedUser;
-    lessonId: string;
-  }) {
+  async attackLesson({ i18n, loggedUser, lessonId }: { i18n: I18nContext; loggedUser: LoggedUser; lessonId: string }) {
     const session = await this.connection.startSession();
 
     try {
@@ -322,15 +286,11 @@ export class LearningService {
     earning = parseInt(earning);
     const balance = kid.balance + earning;
 
-    const investmentBalance =
-      kid.asset.investment.balance +
-      (earning * kid.asset.investment.ratio) / 100;
+    const investmentBalance = kid.asset.investment.balance + (earning * kid.asset.investment.ratio) / 100;
 
-    const spendingBalance =
-      kid.asset.spending.balance + (earning * kid.asset.spending.ratio) / 100;
+    const spendingBalance = kid.asset.spending.balance + (earning * kid.asset.spending.ratio) / 100;
 
-    const sharingBalance =
-      kid.asset.sharing.balance + (earning * kid.asset.sharing.ratio) / 100;
+    const sharingBalance = kid.asset.sharing.balance + (earning * kid.asset.sharing.ratio) / 100;
 
     await this.kidModel.updateOne(
       { _id: kid._id },
@@ -415,15 +375,11 @@ export class LearningService {
     }
 
     if (!questionId) {
-      throw new BadRequestException(
-        i18n.t('error.missingField', { args: { fieldName: 'questionId' } }),
-      );
+      throw new BadRequestException(i18n.t('error.missingField', { args: { fieldName: 'questionId' } }));
     }
 
     if (!answerKey) {
-      throw new BadRequestException(
-        i18n.t('error.missingField', { args: { fieldName: 'answerKey' } }),
-      );
+      throw new BadRequestException(i18n.t('error.missingField', { args: { fieldName: 'answerKey' } }));
     }
 
     const { questions } = lesson;
@@ -434,72 +390,51 @@ export class LearningService {
 
     const { questions: questionTrackings } = lessonTracking;
 
-    const questionSubmitting = questions.find(
-      (question) => question._id.toString() === questionId,
-    );
+    const questionSubmitting = questions.find((question) => question._id.toString() === questionId);
 
     const questionsSorted = lodash.orderBy(questions, ['order'], ['asc']);
 
-    const previousQuestion = lodash
-      .filter(questionsSorted, (ele) => ele.order < questionSubmitting.order)
-      .pop();
+    const previousQuestion = lodash.filter(questionsSorted, (ele) => ele.order < questionSubmitting.order).pop();
 
     if (
       previousQuestion &&
-      questionTrackings.find(
-        (ele) => ele.questionId.toString() === previousQuestion._id.toString(),
-      ).status != Status.COMPLETED
+      questionTrackings.find((ele) => ele.questionId.toString() === previousQuestion._id.toString()).status !=
+        Status.COMPLETED
     ) {
-      throw new BadRequestException(
-        i18n.t('error.completePreviousQuestionFirst'),
-      );
+      throw new BadRequestException(i18n.t('error.completePreviousQuestionFirst'));
     }
 
     // the index off questionSubmitting in lesson tracking
     const questionTrackingIndex = questionTrackings.findIndex(
-      (questionTracking) =>
-        questionTracking.questionId.toString() === questionId,
+      (questionTracking) => questionTracking.questionId.toString() === questionId,
     );
 
     let success, earned;
 
-    if (
-      lessonTracking.questions[questionTrackingIndex].status ===
-      Status.INPROGRESS
-    ) {
+    if (lessonTracking.questions[questionTrackingIndex].status === Status.INPROGRESS) {
       // update story status to completed, add earned
       questionTrackings[questionTrackingIndex].status = Status.COMPLETED;
       questionTrackings[questionTrackingIndex].answerKey = answerKey;
-      if (
-        questionSubmitting.rightAnswerKey.toUpperCase().trim() !==
-        answerKey.toUpperCase().trim()
-      ) {
+      if (questionSubmitting.rightAnswerKey.toUpperCase().trim() !== answerKey.toUpperCase().trim()) {
         questionTrackings[questionTrackingIndex].earned = 0;
         earned = 0;
         success = false;
       } else {
         questionTrackings[questionTrackingIndex].earned = questions.find(
-          (question) =>
-            question._id.toString() ===
-            questionTrackings[questionTrackingIndex].questionId.toString(),
+          (question) => question._id.toString() === questionTrackings[questionTrackingIndex].questionId.toString(),
         ).earning;
         earned = questionTrackings[questionTrackingIndex].earned;
         success = true;
       }
 
       // next question
-      const nextQuestion = lodash
-        .filter(questionsSorted, (ele) => ele.order > questionSubmitting.order)
-        .shift();
+      const nextQuestion = lodash.filter(questionsSorted, (ele) => ele.order > questionSubmitting.order).shift();
 
       let totalEarnedQuiz;
       if (!nextQuestion) {
         // update story to inProgress if questionSubmitting is the end of questions
         lessonTracking.story.status = Status.INPROGRESS;
-        totalEarnedQuiz = questionTrackings.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.earned,
-          0,
-        );
+        totalEarnedQuiz = questionTrackings.reduce((accumulator, currentValue) => accumulator + currentValue.earned, 0);
       } else {
         // update next question to inProgress
         questionTrackings[questionTrackingIndex + 1].status = Status.INPROGRESS;
@@ -525,9 +460,7 @@ export class LearningService {
       ]);
 
       const rightAnswerId = questionSubmitting.answers.find(
-        (item) =>
-          item.key.toUpperCase().trim() ===
-          questionSubmitting.rightAnswerKey.toUpperCase().trim(),
+        (item) => item.key.toUpperCase().trim() === questionSubmitting.rightAnswerKey.toUpperCase().trim(),
       )?._id;
 
       return {
@@ -539,10 +472,7 @@ export class LearningService {
       };
     }
 
-    if (
-      questionSubmitting.rightAnswerKey.toUpperCase().trim() !==
-      answerKey.toUpperCase().trim()
-    ) {
+    if (questionSubmitting.rightAnswerKey.toUpperCase().trim() !== answerKey.toUpperCase().trim()) {
       success = false;
     } else {
       success = true;
@@ -550,9 +480,7 @@ export class LearningService {
 
     return {
       rightAnswerId: questionSubmitting.answers.find(
-        (item) =>
-          item.key.toUpperCase().trim() ===
-          questionSubmitting.rightAnswerKey.toUpperCase().trim(),
+        (item) => item.key.toUpperCase().trim() === questionSubmitting.rightAnswerKey.toUpperCase().trim(),
       )?._id,
       rightAnswerKey: questionSubmitting.rightAnswerKey,
       success,
@@ -572,11 +500,7 @@ export class LearningService {
     lessonTracking: CurriculumLessonTrackingDocument;
     lesson: CurriculumLessonDocument;
   }) {
-    if (
-      lessonTracking.questions.some(
-        (question) => question.status !== Status.COMPLETED,
-      )
-    ) {
+    if (lessonTracking.questions.some((question) => question.status !== Status.COMPLETED)) {
       throw new BadRequestException(i18n.t('error.completePreviousPartFirst'));
     }
 
@@ -624,9 +548,7 @@ export class LearningService {
     }
 
     if (!score) {
-      throw new BadRequestException(
-        i18n.t('error.missingField', { fieldName: 'score' }),
-      );
+      throw new BadRequestException(i18n.t('error.missingField', { fieldName: 'score' }));
     }
 
     if (lessonTracking.game.status === Status.INPROGRESS) {
@@ -658,8 +580,8 @@ export class LearningService {
 
       const { questions: questionTrackings } = lessonTracking;
 
-      const totalEarnedQuiz = questionTrackings.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.earned,
+      const totalEarnedQuiz: number = questionTrackings.reduce(
+        (accumulator: number, currentValue: QuestionTracking) => accumulator + currentValue.earned,
         0,
       );
       const totalEarnedLevel =
@@ -707,13 +629,12 @@ export class LearningService {
         throw new BadRequestException(i18n.t('error.errorUserExist'));
       }
 
-      const { lesson, lessonTracking } =
-        await this.verifyAccessLessonAndGetLessonAndLessonTracking({
-          i18n,
-          lessonId,
-          kid,
-          session,
-        });
+      const { lesson, lessonTracking } = await this.verifyAccessLessonAndGetLessonAndLessonTracking({
+        i18n,
+        lessonId,
+        kid,
+        session,
+      });
 
       let result;
       switch (type) {

@@ -1,4 +1,4 @@
-import { Controller, Get, Render, Req, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { StripeGateway } from './stripe.gateway';
 
@@ -10,7 +10,6 @@ export class InvoiceController {
   // @Render('invoice-sample.ejs')
   dynamicData(@Req() req: Request, @Res() res: Response) {
     const {
-      user,
       invoiceNumber,
       companyName,
       companyAddress,

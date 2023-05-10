@@ -2,18 +2,10 @@ import * as moment from 'moment';
 import { StripeAbstract } from '../abstract/stripe.abstract';
 
 import { Injectable } from '@nestjs/common';
-import {
-  ICreate,
-  IRetrieve,
-  IList,
-  ICancel,
-} from '../../interface/crud.interface';
+import { ICreate, IRetrieve, IList, ICancel } from '../../interface/crud.interface';
 
 @Injectable()
-export class SubscriptionStripeService
-  extends StripeAbstract
-  implements ICreate, IRetrieve, IList, ICancel
-{
+export class SubscriptionStripeService extends StripeAbstract implements ICreate, IRetrieve, IList, ICancel {
   static statusCanceled = 'canceled';
   static statusActive = 'active';
 

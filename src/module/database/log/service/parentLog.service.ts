@@ -41,23 +41,13 @@ export class ParentLogService extends LogDBService {
       //compare pin country
       result = this.compareChangedData(self, docToUpdate, 'country', result);
       //compare pin stripeCusId
-      result = this.compareChangedData(
-        self,
-        docToUpdate,
-        'stripeCusId',
-        result,
-      );
+      result = this.compareChangedData(self, docToUpdate, 'stripeCusId', result);
       //compare pin user
       result = this.compareChangedData(self, docToUpdate, 'user', result);
       //compare pin kids
       result = this.compareChangedData(self, docToUpdate, 'kids', result);
       //compare pin watchingKid
-      result = this.compareChangedData(
-        self,
-        docToUpdate,
-        'watchingKid',
-        result,
-      );
+      result = this.compareChangedData(self, docToUpdate, 'watchingKid', result);
       //compare pin isDeleted
       result = this.compareChangedData(self, docToUpdate, 'isDeleted', result);
 

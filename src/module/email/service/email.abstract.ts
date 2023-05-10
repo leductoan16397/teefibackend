@@ -18,13 +18,9 @@ export abstract class SendGridService {
   protected dynamicData: any;
   protected attachments?: AttachmentData[];
 
-  constructor(
-    @Inject(ConfigService) protected readonly configService: ConfigService,
-  ) {
+  constructor(@Inject(ConfigService) protected readonly configService: ConfigService) {
     this.sendGridService = sgMail;
-    this.sendGridService.setApiKey(
-      this.configService.get<string>('SENDGRID_API_KEY'),
-    );
+    this.sendGridService.setApiKey(this.configService.get<string>('SENDGRID_API_KEY'));
     this.fromEmail = configService.get<string>('SENDGRID_MAIL_FROM');
   }
 
@@ -45,10 +41,7 @@ export abstract class SendGridService {
         );
       })
       .catch((err) => {
-        console.log(
-          '🚀 ~ file: email.abstract.ts:36 ~ SendGridService ~ send ~ err:',
-          err,
-        );
+        console.log('🚀 ~ file: email.abstract.ts:36 ~ SendGridService ~ send ~ err:', err);
       });
   }
 
@@ -70,10 +63,7 @@ export abstract class SendGridService {
         );
       })
       .catch((err) => {
-        console.log(
-          '🚀 ~ file: email.abstract.ts:36 ~ SendGridService ~ send ~ err:',
-          err,
-        );
+        console.log('🚀 ~ file: email.abstract.ts:36 ~ SendGridService ~ send ~ err:', err);
       });
   }
 

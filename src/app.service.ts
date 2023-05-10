@@ -52,9 +52,7 @@ export class AppService {
         listUserId.push(users[u]._id);
       }
 
-      const tmpStudent = await this.parentModel
-        .find({ userId: { $in: listUserId } })
-        .select(['userId', 'name']);
+      const tmpStudent = await this.parentModel.find({ userId: { $in: listUserId } }).select(['userId', 'name']);
 
       const listStudent = {};
       for (const s in tmpStudent) {
@@ -68,13 +66,8 @@ export class AppService {
               clientMailGroup[mailCollections[i].type].push({
                 email: mailCollections[i].email,
                 //name: mailCollections[i].name,
-                country:
-                  mailCollections[i].country == 'vn'
-                    ? 'Viet Nam'
-                    : mailCollections[i].country,
-                createdAt: moment(mailCollections[i].createdAt).format(
-                  'YYYY-MM-DD HH:mm',
-                ),
+                country: mailCollections[i].country == 'vn' ? 'Viet Nam' : mailCollections[i].country,
+                createdAt: moment(mailCollections[i].createdAt).format('YYYY-MM-DD HH:mm'),
               });
             }
             continue;
@@ -88,13 +81,8 @@ export class AppService {
               name: listStudent[mailCollections[i].userId.toString()]
                 ? listStudent[mailCollections[i].userId.toString()]
                 : '',
-              country:
-                mailCollections[i].country == 'vn'
-                  ? 'Viet Nam'
-                  : mailCollections[i].country,
-              createdAt: moment(mailCollections[i].createdAt).format(
-                'YYYY-MM-DD HH:mm',
-              ),
+              country: mailCollections[i].country == 'vn' ? 'Viet Nam' : mailCollections[i].country,
+              createdAt: moment(mailCollections[i].createdAt).format('YYYY-MM-DD HH:mm'),
             });
             break;
         }

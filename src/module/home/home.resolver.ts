@@ -11,10 +11,7 @@ export class HomeResolver {
 
   @Query(() => HomeType)
   async home(@Args('lang', { nullable: false }) lang: string) {
-    console.log(
-      '🚀 ~ file: home.resolver.ts:15 ~ HomeResolver ~ home ~ lang:',
-      lang,
-    );
+    console.log('🚀 ~ file: home.resolver.ts:15 ~ HomeResolver ~ home ~ lang:', lang);
     return this.homeService.landingPageData();
   }
 
@@ -32,10 +29,7 @@ export class HomeResolver {
 
   @Query(() => DeleteUserType)
   async initDeleteUser(@Args('lang', { nullable: true }) lang?: string) {
-    console.log(
-      '🚀 ~ file: home.resolver.ts:35 ~ HomeResolver ~ initDeleteUser ~ lang:',
-      lang,
-    );
+    console.log('🚀 ~ file: home.resolver.ts:35 ~ HomeResolver ~ initDeleteUser ~ lang:', lang);
     return this.homeService.deleteUserReasons();
   }
 }

@@ -9,13 +9,7 @@ export class OtpEmailService extends SendGridService {
     this.templateId = 'd-2a059f25a95646ea941e5ee9831ba211';
   }
 
-  setDynamicData({
-    otpCode,
-    expireTime,
-  }: {
-    otpCode: string | number;
-    expireTime: string;
-  }): void {
+  setDynamicData({ otpCode, expireTime }: { otpCode: string | number; expireTime: string }): void {
     this.dynamicData = { otpCode, expireTime };
   }
 }

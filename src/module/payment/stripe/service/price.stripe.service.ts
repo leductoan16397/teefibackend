@@ -4,17 +4,8 @@ import { StripeAbstract } from '../abstract/stripe.abstract';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class PriceStripeService
-  extends StripeAbstract
-  implements IUpdate, ICreate
-{
-  async update({
-    id,
-    params,
-  }: {
-    id: string;
-    params: { amount: number; interval: INTERVAL_TYPE };
-  }) {
+export class PriceStripeService extends StripeAbstract implements IUpdate, ICreate {
+  async update({ id, params }: { id: string; params: { amount: number; interval: INTERVAL_TYPE } }) {
     try {
       const price = await this.stripe.prices.update(id, {
         currency_options: {

@@ -30,12 +30,8 @@ export class InvoiceStripeService extends StripeAbstract implements IRetrieve {
             period: {
               //start: invoices.data[i].lines.data[0].period.start,
               //end: invoices.data[i].lines.data[0].period.end
-              start: moment
-                .unix(invoices.data[i].lines.data[0].period.start)
-                .format('YYYY-MM-DD HH:mm:00'),
-              end: moment
-                .unix(invoices.data[i].lines.data[0].period.end)
-                .format('YYYY-MM-DD HH:mm:00'),
+              start: moment.unix(invoices.data[i].lines.data[0].period.start).format('YYYY-MM-DD HH:mm:00'),
+              end: moment.unix(invoices.data[i].lines.data[0].period.end).format('YYYY-MM-DD HH:mm:00'),
             },
           });
         }

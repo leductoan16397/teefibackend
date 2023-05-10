@@ -3,10 +3,7 @@ import { StripeAbstract } from '../abstract/stripe.abstract';
 import { ICreate, IRetrieve, IUpdate } from '../../interface/crud.interface';
 
 @Injectable()
-export class CustomerStripeService
-  extends StripeAbstract
-  implements ICreate, IRetrieve, IUpdate
-{
+export class CustomerStripeService extends StripeAbstract implements ICreate, IRetrieve, IUpdate {
   async create({ email }: { email: string }) {
     try {
       const customer = await this.stripe.customers.create({

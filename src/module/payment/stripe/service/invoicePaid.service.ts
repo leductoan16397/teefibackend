@@ -8,12 +8,7 @@ import { Invoice } from 'src/module/database/schema/invoice.schema';
 import { Kid } from 'src/module/database/schema/kid.schema';
 import { Parent } from 'src/module/database/schema/parent.schema';
 import { User } from 'src/module/database/schema/user.schema';
-import {
-  ENROLL_STATUS,
-  INVOICE_STATUS,
-  INVOICE_TYPE,
-  MEMBER_TYPE,
-} from 'src/common/constant';
+import { ENROLL_STATUS, INVOICE_STATUS, INVOICE_TYPE, MEMBER_TYPE } from 'src/common/constant';
 import moment, { Moment } from 'moment';
 import { Membership } from 'src/module/database/schema/membership.schema';
 import { StripeGateway } from '../stripe.gateway';
@@ -35,8 +30,7 @@ export class InvoicePaidService extends StripeEventAbstract {
     private readonly membershipModel: Model<Membership>,
 
     @InjectModel(EnrollHistory.name)
-    private readonly enrollHistoryModel: Model<EnrollHistory> &
-      typeof EnrollHistory,
+    private readonly enrollHistoryModel: Model<EnrollHistory> & typeof EnrollHistory,
 
     private readonly stripeGateway: StripeGateway,
     private readonly emailService: EmailService,
@@ -69,20 +63,14 @@ export class InvoicePaidService extends StripeEventAbstract {
 
       if (checkInvoice) {
         if (checkInvoice.type == INVOICE_TYPE.trial) {
-          const student = await this.parentModel
-            .findOne({ _id: checkInvoice.studentId })
-            .lean();
+          const student = await this.parentModel.findOne({ _id: checkInvoice.studentId }).lean();
 
           let studentName = student.name;
 
-          const user = await this.userModel
-            .findOne({ _id: student.userId })
-            .lean();
+          const user = await this.userModel.findOne({ _id: student.userId }).lean();
 
           if (checkInvoice.childId) {
-            const sd = await this.kidModel
-              .findOne({ _id: checkInvoice.childId })
-              .lean();
+            const sd = await this.kidModel.findOne({ _id: checkInvoice.childId }).lean();
             studentName = sd.name;
           }
 
@@ -97,9 +85,7 @@ export class InvoicePaidService extends StripeEventAbstract {
             id: invoiceAliasId,
             name: studentName,
             email: user.username,
-            activeTime: moment
-              .unix(lines.data[0].period.start)
-              .format('YYYY-MM-DD HH:mm:ss'),
+            activeTime: moment.unix(lines.data[0].period.start).format('YYYY-MM-DD HH:mm:ss'),
             isTrial: 1,
             memberType: enrollHistory.memberType,
           });
@@ -109,21 +95,15 @@ export class InvoicePaidService extends StripeEventAbstract {
       }
 
       const invoicePeriod = {
-        start: moment
-          .unix(lines.data[0].period.start)
-          .format('YYYY-MM-DD HH:mm:ss'),
-        end: moment
-          .unix(lines.data[0].period.end)
-          .format('YYYY-MM-DD HH:mm:ss'),
+        start: moment.unix(lines.data[0].period.start).format('YYYY-MM-DD HH:mm:ss'),
+        end: moment.unix(lines.data[0].period.end).format('YYYY-MM-DD HH:mm:ss'),
       };
 
       if (moment(enrollHistory.expireTime) >= moment(invoicePeriod.end)) {
         throw new Error('do nothing for past invoice');
       }
 
-      const curInvoice = await this.invoiceModel
-        .findOne({ _id: enrollHistory.invoiceId })
-        .lean();
+      const curInvoice = await this.invoiceModel.findOne({ _id: enrollHistory.invoiceId }).lean();
 
       const membership = await this.membershipModel
         .findOne({
@@ -131,11 +111,7 @@ export class InvoicePaidService extends StripeEventAbstract {
         })
         .lean();
 
-      if (
-        ![MEMBER_TYPE.monthly, MEMBER_TYPE.yearly].includes(
-          enrollHistory.memberType,
-        )
-      ) {
+      if (![MEMBER_TYPE.monthly, MEMBER_TYPE.yearly].includes(enrollHistory.memberType)) {
         throw new Error('only process for monthly or yearly membership');
       }
 
@@ -182,9 +158,7 @@ export class InvoicePaidService extends StripeEventAbstract {
 
       const kidId = enrollHistory.kidId;
 
-      const student = await this.parentModel
-        .findOne({ _id: recurInvoice.parentId })
-        .lean();
+      const student = await this.parentModel.findOne({ _id: recurInvoice.parentId }).lean();
 
       let studentName = student.name;
 
@@ -202,9 +176,7 @@ export class InvoicePaidService extends StripeEventAbstract {
             session: session,
           },
         );
-        const sd = await this.kidModel
-          .findOne({ _id: recurInvoice.childId })
-          .lean();
+        const sd = await this.kidModel.findOne({ _id: recurInvoice.childId }).lean();
         studentName = sd.name;
       } else {
         await this.parentModel.findOneAndUpdate(
@@ -235,9 +207,7 @@ export class InvoicePaidService extends StripeEventAbstract {
         id: invoiceAliasId,
         name: studentName,
         email: user.username,
-        activeTime: moment
-          .unix(lines.data[0].period.start)
-          .format('YYYY-MM-DD HH:mm:ss'),
+        activeTime: moment.unix(lines.data[0].period.start).format('YYYY-MM-DD HH:mm:ss'),
         isTrial: 0,
         memberType: enrollHistory.memberType,
       });
@@ -262,9 +232,9 @@ export class InvoicePaidService extends StripeEventAbstract {
     const invoiceName = `${params.id}.pdf`;
     const invoiceUrl = `publics/invoices/${invoiceName}`;
 
-    const url = await this.s3Service.uploadFileUrlToS3(invoiceFile, invoiceUrl);
+    await this.s3Service.uploadFileUrlToS3(invoiceFile, invoiceUrl);
 
-    const mailResult = this.emailService.sendPaymentInvoice({
+    this.emailService.sendPaymentInvoice({
       isTrial: params.isTrial,
       memberType: params.memberType,
       invoicePdf: invoiceUrl,

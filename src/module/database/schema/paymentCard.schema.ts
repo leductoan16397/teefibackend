@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
+import { UserRole } from 'src/common/enum';
 
 export type PaymentCardDocument = HydratedDocument<PaymentCard>;
 
@@ -27,8 +28,8 @@ export class PaymentCard {
   })
   userId: Types.ObjectId;
 
-  @Prop({})
-  userType: string;
+  @Prop({ enum: UserRole })
+  userType: UserRole;
 
   @Prop({ unique: true })
   fingerprint: string;

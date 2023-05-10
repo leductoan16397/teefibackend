@@ -1,11 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {
-  CallbackWithoutResultAndOptionalError,
-  HydratedDocument,
-  Model,
-  SaveOptions,
-  Types,
-} from 'mongoose';
+import { CallbackWithoutResultAndOptionalError, HydratedDocument, Model, SaveOptions, Types } from 'mongoose';
 import { UserRole, UserStatus } from 'src/common/enum';
 import { encodePassword, generateSalt } from 'src/common/utils';
 import { Kid } from './kid.schema';
@@ -73,16 +67,11 @@ export class User {
   updatedAt?: Date;
 
   async verifyPassword(password: string) {
-    return (
-      password &&
-      this.hashPassword === (await encodePassword(password, this.salt))
-    );
+    return password && this.hashPassword === (await encodePassword(password, this.salt));
   }
 
   static async checkUsernameUnique(username: string) {
-    const checkUnique = await (this as unknown as Model<User>)
-      .findOne({ username })
-      .lean();
+    const checkUnique = await (this as unknown as Model<User>).findOne({ username }).lean();
 
     return checkUnique ? false : true;
   }
@@ -96,7 +85,7 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.loadClass(User);
 
-UserSchema.virtual('password').set(async function (password) {
+UserSchema.virtual('password').set(async function (password: string) {
   if (!this.salt) this.salt = generateSalt();
   this.hashPassword = await encodePassword(password, this.salt);
 });
@@ -126,41 +115,31 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
   return next();
 });
 
-UserSchema.pre(
-  'save',
-  async function (
-    next: CallbackWithoutResultAndOptionalError,
-    options: SaveOptions,
-  ) {
-    console.log('hook create >>>>');
+UserSchema.pre('save', async function (next: CallbackWithoutResultAndOptionalError, options: SaveOptions) {
+  console.log('hook create >>>>');
 
-    const appContext = await NestFactory.createApplicationContext(AppModule, {
-      logger: false,
-    });
-    const userLogService = appContext.get(UserLogService);
+  const appContext = await NestFactory.createApplicationContext(AppModule, {
+    logger: false,
+  });
+  const userLogService = appContext.get(UserLogService);
 
-    const self: any = this as any;
+  const self: any = this as any;
 
-    await userLogService.doCreate({ self, options });
-    await appContext.close();
+  await userLogService.doCreate({ self, options });
+  await appContext.close();
 
-    return next();
-  },
-);
+  return next();
+});
 
-UserSchema.pre(
-  'deleteOne',
-  { document: true, query: true },
-  async function (next) {
-    console.log('hook remove >>>>');
+UserSchema.pre('deleteOne', { document: true, query: true }, async function (next) {
+  console.log('hook remove >>>>');
 
-    const appContext = await NestFactory.createApplicationContext(AppModule, {
-      logger: false,
-    });
-    const userLogService = appContext.get(UserLogService);
-    await userLogService.doRemove({ self: this });
-    await appContext.close();
+  const appContext = await NestFactory.createApplicationContext(AppModule, {
+    logger: false,
+  });
+  const userLogService = appContext.get(UserLogService);
+  await userLogService.doRemove({ self: this });
+  await appContext.close();
 
-    return next();
-  },
-);
+  return next();
+});

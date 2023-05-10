@@ -37,12 +37,7 @@ export class KidLogService extends LogDBService {
       //compare name
       result = this.compareChangedData(self, docToUpdate, 'name', result);
       //compare activeInvoiceId
-      result = this.compareChangedData(
-        self,
-        docToUpdate,
-        'activeInvoiceId',
-        result,
-      );
+      result = this.compareChangedData(self, docToUpdate, 'activeInvoiceId', result);
       //compare address
       result = this.compareChangedData(self, docToUpdate, 'address', result);
       //compare country
@@ -74,7 +69,7 @@ export class KidLogService extends LogDBService {
   }
 
   async doCreate({ options, self }: { self; options }) {
-    const { createdBy, createdByUserType, session, enableLog } = options;
+    const { createdBy, createdByUserType, session } = options;
 
     try {
       await this.logForCreate({

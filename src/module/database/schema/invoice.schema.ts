@@ -1,17 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, {
-  CallbackWithoutResultAndOptionalError,
-  HydratedDocument,
-  Model,
-  SaveOptions,
-  Types,
-} from 'mongoose';
-import {
-  COLLECTION_NAME,
-  ENV,
-  INVOICE_STATUS,
-  INVOICE_TYPE,
-} from 'src/common/constant';
+import mongoose, { CallbackWithoutResultAndOptionalError, HydratedDocument, Model, SaveOptions, Types } from 'mongoose';
+import { COLLECTION_NAME, ENV, INVOICE_STATUS, INVOICE_TYPE } from 'src/common/constant';
 import * as moment from 'moment';
 import { InvoiceLogService } from '../log/service/invoiceLog.service';
 import { NestFactory } from '@nestjs/core';
@@ -148,22 +137,16 @@ InvoiceSchema.pre('findOneAndUpdate', async function (next) {
   return next();
 });
 
-InvoiceSchema.pre(
-  'save',
-  async function (
-    next: CallbackWithoutResultAndOptionalError,
-    options: SaveOptions,
-  ) {
-    console.log('hook create >>>>');
+InvoiceSchema.pre('save', async function (next: CallbackWithoutResultAndOptionalError, options: SaveOptions) {
+  console.log('hook create >>>>');
 
-    const appContext = await NestFactory.createApplicationContext(AppModule, {
-      logger: false,
-    });
-    const invoiceLogService = appContext.get(InvoiceLogService);
+  const appContext = await NestFactory.createApplicationContext(AppModule, {
+    logger: false,
+  });
+  const invoiceLogService = appContext.get(InvoiceLogService);
 
-    const self: any = this as any;
-    await invoiceLogService.doCreate({ self, options });
+  const self: any = this as any;
+  await invoiceLogService.doCreate({ self, options });
 
-    return next();
-  },
-);
+  return next();
+});

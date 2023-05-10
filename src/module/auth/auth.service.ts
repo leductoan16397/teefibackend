@@ -5,11 +5,7 @@ import { TokenPayload, LoggedUser } from './passport/auth.type';
 import { AppPushToken } from 'src/module/database/schema/appPushToken.schema';
 import { UserRole } from 'src/common/enum';
 import { I18nContext } from 'nestjs-i18n';
-import {
-  BadGatewayException,
-  BadRequestException,
-  Injectable,
-} from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable } from '@nestjs/common';
 import { OTP_ACTION, otpSignupValidation } from 'src/common/constant';
 import * as moment from 'moment';
 import { ConfigService } from '@nestjs/config';
@@ -43,8 +39,7 @@ export class AuthService {
     @InjectModel(BlockOTP.name) private readonly blockOTPModel: Model<BlockOTP>,
     @InjectModel(Parent.name) private readonly parentModel: Model<Parent>,
 
-    @InjectModel(AppPushToken.name)
-    private readonly appPushTokenModel: Model<AppPushToken>,
+    @InjectModel(AppPushToken.name) private readonly appPushTokenModel: Model<AppPushToken>,
 
     @InjectConnection() private connection: Connection,
   ) {
@@ -70,16 +65,7 @@ export class AuthService {
     };
   }
 
-  async registerOtp({
-    i18n,
-    email,
-    action,
-  }: {
-    i18n: I18nContext;
-    email: string;
-    type: string;
-    action: string;
-  }) {
+  async registerOtp({ i18n, email, action }: { i18n: I18nContext; email: string; type: string; action: string }) {
     if (action === OTP_ACTION.signup) {
       const checkUser = await this.userModel.findOne({
         username: email,
@@ -157,9 +143,7 @@ export class AuthService {
       }).save();
     }
 
-    const codeExpireTime = moment()
-      .add(this.limitMinutesExpireOtpCode, 'minutes')
-      .format('YYYY-MM-DD HH:mm:ss');
+    const codeExpireTime = moment().add(this.limitMinutesExpireOtpCode, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
     const otpCode = await new this.optCodeModel({
       type: otpSignupValidation,
@@ -233,7 +217,7 @@ export class AuthService {
     platform: string;
     options?: QueryOptions;
   }) {
-    return await this.appPushTokenModel.updateOne(
+    return this.appPushTokenModel.updateOne(
       {
         userId,
         userType,
@@ -332,17 +316,7 @@ export class AuthService {
     }
   }
 
-  async quickVerifyOtp({
-    code,
-    email,
-    type,
-    i18n,
-  }: {
-    code: string;
-    email: string;
-    type: string;
-    i18n: I18nContext;
-  }) {
+  async quickVerifyOtp({ code, email, type, i18n }: { code: string; email: string; type: string; i18n: I18nContext }) {
     return this.verifyOtp({ code, email, type, i18n, quickCheck: true });
   }
 
@@ -444,9 +418,7 @@ export class AuthService {
       });
 
       if (!stripeCustomer) {
-        throw new BadGatewayException(
-          i18n.t('error.errorStripeCreateCustomer'),
-        );
+        throw new BadGatewayException(i18n.t('error.errorStripeCreateCustomer'));
       }
 
       switch (type) {

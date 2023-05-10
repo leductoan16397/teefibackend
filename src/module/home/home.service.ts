@@ -23,8 +23,7 @@ export class HomeService {
           title: 'Financial Education for Teens 7-18',
           description:
             "Investing in your teen's financial literacy today will create a legacy of financial independence for their future",
-          ogImage:
-            'https://d2csac8bc0t9gj.cloudfront.net/publics/home/home-thumb.jpg',
+          ogImage: 'https://d2csac8bc0t9gj.cloudfront.net/publics/home/home-thumb.jpg',
         },
         sectionGalleries: {},
         sectionPrivatePlan: [],
@@ -96,35 +95,30 @@ export class HomeService {
 
       result['sectionOurClientSay'] = {
         title: 'What Our Client Says?',
-        content:
-          'Our mission is to help at least 10 million teens master financial education',
+        content: 'Our mission is to help at least 10 million teens master financial education',
         data: [
           {
             content:
               "Teefi has been a game changer for my teenager's financial education. The interactive lessons are engaging and easy to follow, and my child now has a better understanding of budgeting, saving, and investing. I highly recommend Teefi to any parent looking to give their teen the tools they need to succeed in the real world.",
-            image:
-              'https://d2csac8bc0t9gj.cloudfront.net/publics/home/Emily Johnson.png',
+            image: 'https://d2csac8bc0t9gj.cloudfront.net/publics/home/Emily Johnson.png',
             name: 'Emily Johnson',
           },
           {
             content:
               "As a busy parent, I don't always have the time to teach my teen about personal finance. That's why I'm grateful for Teefi - it's like having a personal finance tutor for my child. The platform is user-friendly and offers a variety of topics that are relevant to teenagers today. I've already noticed a positive change in my child's financial habits since they started using Teefi.",
-            image:
-              'https://d2csac8bc0t9gj.cloudfront.net/publics/home/Sarah Patel.png',
+            image: 'https://d2csac8bc0t9gj.cloudfront.net/publics/home/Sarah Patel.png',
             name: 'Sarah Patel',
           },
           {
             content:
               "Teefi has exceeded my expectations. My teenager is learning about money management in a fun and engaging way, and they're developing valuable skills that will benefit them for years to come. I appreciate how Teefi empowers teens to take control of their financial future and make smart decisions. Thank you, Teefi!",
-            image:
-              'https://d2csac8bc0t9gj.cloudfront.net/publics/home/James Rodriguez.png',
+            image: 'https://d2csac8bc0t9gj.cloudfront.net/publics/home/James Rodriguez.png',
             name: 'James Rodriguez',
           },
           {
             content:
               "As a parent, I'm always looking for ways to help my children learn about finances and develop good money habits. That's why I was so impressed with TeeFi's financial education curriculum for kids and teens. The lessons are engaging and interactive, with a mix of quizzes, stories, and games that keep my kids interested and motivated to learn. I've seen a noticeable improvement in their understanding of money concepts and their ability to manage their own finances since we started using TeeFi. The platform is also user-friendly and easy to navigate, which has made it a stress-free experience for me as a parent. I highly recommend TeeFi to any parents looking for a fun and effective way to teach their kids about finances.",
-            image:
-              'https://d2csac8bc0t9gj.cloudfront.net/publics/home/James.jpg',
+            image: 'https://d2csac8bc0t9gj.cloudfront.net/publics/home/James.jpg',
             name: 'Michael Chen',
           },
         ],
@@ -136,10 +130,7 @@ export class HomeService {
     }
   }
 
-  async privatePlan(params: {
-    clientIp?: string;
-    switchToStandardCurrency?: number | string;
-  }) {
+  async privatePlan(params: { clientIp?: string; switchToStandardCurrency?: number | string }) {
     const result = {
       commitmentLevel: [],
       isStandardCurrency: 1,
@@ -160,9 +151,7 @@ export class HomeService {
       countryCurrency = 'us';
     }
 
-    const currencyExchange = await this.constantModel
-      .findOne({ key: 'currencyExchange' })
-      .lean();
+    const currencyExchange = await this.constantModel.findOne({ key: 'currencyExchange' }).lean();
 
     let billInfo = 'Billed Monthly';
 
@@ -176,34 +165,19 @@ export class HomeService {
 
         for (const i in memberships) {
           if (memberships[i].key == MEMBER_TYPE.yearly) {
-            totalDiscount =
-              (((memberships[i].price / 12) * memberships[i].discount) / 100) *
-              12 *
-              rate;
+            totalDiscount = (((memberships[i].price / 12) * memberships[i].discount) / 100) * 12 * rate;
 
-            defPrice = convertAmountVNDByCurrency(
-              memberships[i].totalPrice,
-              rate,
-              memberships[i].currency,
-            );
+            defPrice = convertAmountVNDByCurrency(memberships[i].totalPrice, rate, memberships[i].currency);
 
             totalPrice = `${formatMoneyVN(defPrice)} VND`;
 
-            defPrice = convertAmountVNDByCurrency(
-              memberships[i].price,
-              rate,
-              memberships[i].currency,
-            );
+            defPrice = convertAmountVNDByCurrency(memberships[i].price, rate, memberships[i].currency);
 
             price = `${formatMoneyVN(defPrice)} VND`;
 
             billInfo = `${totalPrice} Billed Annually`;
           } else {
-            defPrice = convertAmountVNDByCurrency(
-              memberships[i].totalPrice,
-              rate,
-              memberships[i].currency,
-            );
+            defPrice = convertAmountVNDByCurrency(memberships[i].totalPrice, rate, memberships[i].currency);
 
             price = totalPrice = `${formatMoneyVN(defPrice)} VND`;
           }
@@ -214,10 +188,7 @@ export class HomeService {
             price: price,
             totalPrice: totalPrice,
             billInfo: billInfo,
-            discount:
-              memberships[i].discount != 0
-                ? `Save ${memberships[i].discount}%`
-                : '',
+            discount: memberships[i].discount != 0 ? `Save ${memberships[i].discount}%` : '',
             freeTrial: `${memberships[i].freeTrialDays}-Day Free Trial`,
           });
         }
@@ -225,10 +196,7 @@ export class HomeService {
       default:
         for (const i in memberships) {
           if (memberships[i].key == MEMBER_TYPE.yearly) {
-            totalDiscount = (
-              (((memberships[i].price / 12) * memberships[i].discount) / 100) *
-              12
-            ).toFixed(2);
+            totalDiscount = ((((memberships[i].price / 12) * memberships[i].discount) / 100) * 12).toFixed(2);
 
             billInfo = `$${memberships[i].totalPrice} Billed Annually`;
             price = `$${memberships[i].price}`;
@@ -243,10 +211,7 @@ export class HomeService {
             totalPrice: totalPrice,
             price: price,
             billInfo: billInfo,
-            discount:
-              memberships[i].discount != 0
-                ? `'Save ${memberships[i].discount}%`
-                : '',
+            discount: memberships[i].discount != 0 ? `'Save ${memberships[i].discount}%` : '',
             freeTrial: `${memberships[i].freeTrialDays}-Day Free Trial`,
           });
         }

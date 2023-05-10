@@ -4,10 +4,7 @@ import { StripeAbstract } from '../abstract/stripe.abstract';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ProductStripeService
-  extends StripeAbstract
-  implements ICreate, IList
-{
+export class ProductStripeService extends StripeAbstract implements ICreate, IList {
   async getList() {
     try {
       const products = await this.stripe.products.list({ limit: 10 });

@@ -1,11 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
-import mongoose, {
-  CallbackWithoutResultAndOptionalError,
-  HydratedDocument,
-  SaveOptions,
-  Types,
-} from 'mongoose';
+import mongoose, { CallbackWithoutResultAndOptionalError, HydratedDocument, SaveOptions, Types } from 'mongoose';
 import { User } from './user.schema';
 import { COLLECTION_NAME } from 'src/common/constant';
 import { NestFactory } from '@nestjs/core';
@@ -45,8 +40,7 @@ export class Parent {
   gender?: string;
 
   @Prop({
-    default:
-      'https://d2csac8bc0t9gj.cloudfront.net/publics/students/parent-default-avatar.png',
+    default: 'https://d2csac8bc0t9gj.cloudfront.net/publics/students/parent-default-avatar.png',
   })
   avatar?: string;
 
@@ -136,22 +130,16 @@ ParentSchema.pre('findOneAndUpdate', async function (next) {
   return next();
 });
 
-ParentSchema.pre(
-  'save',
-  async function (
-    next: CallbackWithoutResultAndOptionalError,
-    options: SaveOptions,
-  ) {
-    console.log('hook create >>>>');
+ParentSchema.pre('save', async function (next: CallbackWithoutResultAndOptionalError, options: SaveOptions) {
+  console.log('hook create >>>>');
 
-    const appContext = await NestFactory.createApplicationContext(AppModule, {
-      logger: false,
-    });
-    const parentLogService = appContext.get(ParentLogService);
+  const appContext = await NestFactory.createApplicationContext(AppModule, {
+    logger: false,
+  });
+  const parentLogService = appContext.get(ParentLogService);
 
-    const self: any = this as any;
+  const self: any = this as any;
 
-    await parentLogService.doCreate({ self, options });
-    return next();
-  },
-);
+  await parentLogService.doCreate({ self, options });
+  return next();
+});

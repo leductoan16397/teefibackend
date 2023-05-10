@@ -58,7 +58,7 @@ export enum ENROLL_STATUS {
 
 export type INTERVAL_TYPE = 'month' | 'year';
 
-export const PREFIX_DELETE_USER = 'TF-delete-user';
+export const PREFIX_DELETE_USER = 'TF-deleted-user';
 
 export const PAYMENT = {
   provider: {

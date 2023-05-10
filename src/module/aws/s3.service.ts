@@ -26,7 +26,7 @@ export class S3Service {
 
   async checkFileExist(fileUrl: string) {
     try {
-      const rs = await this.s3Client.send(
+      await this.s3Client.send(
         new HeadObjectCommand({
           Bucket: process.env.AWS_BUCKET,
           Key: fileUrl,
@@ -52,7 +52,7 @@ export class S3Service {
           ACL: 'public-read',
         }),
       )
-      .then((res) => {
+      .then(() => {
         //console.log(`Upload succeeded - `, res);
         return `${process.env.AWS_CLOUD_FRONT_URL}/${imgName}`;
       });
@@ -87,10 +87,10 @@ export class S3Service {
           ACL: 'public-read',
         }),
       )
-      .then((res) => {
+      .then(() => {
         return `${process.env.AWS_CLOUD_FRONT_URL}/${imgName}`;
       })
-      .catch((err) => {
+      .catch(() => {
         return false;
       });
     return result;

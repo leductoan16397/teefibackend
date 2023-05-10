@@ -3,8 +3,7 @@ import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 import { Status } from 'src/common/enum';
 
-export type CurriculumLessonTrackingDocument =
-  HydratedDocument<CurriculumLessonTracking>;
+export type CurriculumLessonTrackingDocument = HydratedDocument<CurriculumLessonTracking>;
 
 export type CurriculumLessonTrackingLeanDoc = CurriculumLessonTracking & {
   _id: Types.ObjectId;
@@ -34,7 +33,7 @@ class GameTracking {
 const GameTrackingSchema = SchemaFactory.createForClass(GameTracking);
 
 @Schema({ _id: false })
-class QuestionTracking {
+export class QuestionTracking {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -111,8 +110,6 @@ export class CurriculumLessonTracking {
   updatedAt?: Date;
 }
 
-export const CurriculumLessonTrackingSchema = SchemaFactory.createForClass(
-  CurriculumLessonTracking,
-);
+export const CurriculumLessonTrackingSchema = SchemaFactory.createForClass(CurriculumLessonTracking);
 
 CurriculumLessonTrackingSchema.loadClass(CurriculumLessonTracking);

@@ -47,7 +47,7 @@ export class EnrollHistoryLogService extends LogDBService {
   }
 
   async doCreate({ options, self }: { self; options }) {
-    const { createdBy, createdByUserType, session, enableLog } = options;
+    const { createdBy, createdByUserType, session } = options;
 
     try {
       await this.logForCreate({

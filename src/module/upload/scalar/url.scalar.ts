@@ -16,9 +16,7 @@ const validate = (value) => {
 
 const parseLiteral = (ast) => {
   if (ast.kind !== Kind.STRING) {
-    throw new GraphQLError(
-      `Query error: Can only parse string as url but got a: ${ast.kind}`,
-    );
+    throw new GraphQLError(`Query error: Can only parse string as url but got a: ${ast.kind}`);
   }
 
   return validate(ast.value);

@@ -34,9 +34,7 @@ import { RootModule } from './module/root.module';
       logger: console,
       formatError: (formattedError) => {
         console.log(
-          `🚀 ~ file: app.module.ts:36 ~ GraphQLError: Time: ${new Date()} | Path: ${
-            formattedError.path
-          }`,
+          `🚀 ~ file: app.module.ts:36 ~ GraphQLError: Time: ${new Date()} | Path: ${formattedError.path}`,
           formattedError.extensions,
         );
 

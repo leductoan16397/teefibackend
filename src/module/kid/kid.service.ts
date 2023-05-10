@@ -17,10 +17,7 @@ import {
   CurriculumLessonTracking,
   CurriculumLessonTrackingDocument,
 } from '../database/schema/curriculumLessonsTracking.schema';
-import {
-  CurriculumLesson,
-  CurriculumLessonDocument,
-} from '../database/schema/curriculumLesson.schema';
+import { CurriculumLesson, CurriculumLessonDocument } from '../database/schema/curriculumLesson.schema';
 import { LearningService } from '../learning/learning.service';
 import { DynamicError } from 'src/common/error';
 
@@ -98,9 +95,7 @@ export class KidService {
         }),
       );
 
-      const activeKid = childs.find(
-        (kid) => kid._id.toString() === manager.watchingKidId.toString(),
-      );
+      const activeKid = childs.find((kid) => kid._id.toString() === manager.watchingKidId.toString());
 
       const enrollHistory = await this.enrollHistoryModel.findOne({
         parentId: manager._id,
@@ -115,9 +110,7 @@ export class KidService {
           memberType: activeKid?.memberType,
           isEnroll: activeKid?.memberType ? 1 : 0,
           isRecurring,
-          enrollExpireTime: enrollHistory
-            ? moment(enrollHistory.expireTime).format('YYYY-MM-DD')
-            : null,
+          enrollExpireTime: enrollHistory ? moment(enrollHistory.expireTime).format('YYYY-MM-DD') : null,
           info: {
             name: activeKid?.name,
             avatar: activeKid?.avatar,
@@ -135,13 +128,7 @@ export class KidService {
     }
   }
 
-  async dailyInspiring({
-    loggedUser,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async dailyInspiring({ loggedUser, i18n }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       const dailyInspiring = await this.constantModel.findOne({
         key: 'kidDailyInspiring',
@@ -195,17 +182,11 @@ export class KidService {
     });
 
     if (!levelTracking) {
-      const firstLevel = (
-        await this.curriculumLevelModel
-          .find({}, null, { sort: { order: 1 }, limit: 1 })
-          .lean()
-      )[0];
+      const firstLevel = (await this.curriculumLevelModel.find({}, null, { sort: { order: 1 }, limit: 1 }).lean())[0];
       return firstLevel;
     }
 
-    const currentLevel = await this.curriculumLevelModel
-      .findOne({ _id: levelTracking.curriculumLevelId })
-      .lean();
+    const currentLevel = await this.curriculumLevelModel.findOne({ _id: levelTracking.curriculumLevelId }).lean();
     return currentLevel;
   }
 
@@ -219,39 +200,23 @@ export class KidService {
       return 0;
     }
 
-    const totalEarned = lessonTrackings.reduce(
-      (accumulator, lessonTracking) => {
-        const introductionEarned = lessonTracking.introduction.earned || 0;
-        const storyEarned = lessonTracking.story.earned || 0;
-        const gameEarned = lessonTracking.game.earned || 0;
-        const questionEarned =
-          lessonTracking.questions?.reduce(
-            (accumulator, questionTracking) =>
-              accumulator + (questionTracking.earned || 0),
-            0,
-          ) || 0;
+    const totalEarned = lessonTrackings.reduce((accumulator, lessonTracking) => {
+      const introductionEarned = lessonTracking.introduction.earned || 0;
+      const storyEarned = lessonTracking.story.earned || 0;
+      const gameEarned = lessonTracking.game.earned || 0;
+      const questionEarned =
+        lessonTracking.questions?.reduce(
+          (accumulator, questionTracking) => accumulator + (questionTracking.earned || 0),
+          0,
+        ) || 0;
 
-        return (
-          accumulator +
-          introductionEarned +
-          storyEarned +
-          gameEarned +
-          questionEarned
-        );
-      },
-      0,
-    );
+      return accumulator + introductionEarned + storyEarned + gameEarned + questionEarned;
+    }, 0);
 
     return totalEarned;
   }
 
-  async learningDashboard({
-    loggedUser,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async learningDashboard({ loggedUser, i18n }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       let kid: KidDocument;
       if (loggedUser.role === UserRole.KID) {
@@ -263,9 +228,7 @@ export class KidService {
         kid = await this.kidModel.findById(parent.watchingKidId);
       }
 
-      const levels = await this.curriculumLevelModel
-        .find({}, null, { sort: { order: 1 } })
-        .lean();
+      const levels = await this.curriculumLevelModel.find({}, null, { sort: { order: 1 } }).lean();
 
       const leaderBoard = await this.getLeaderBoard({
         limit: 10,
@@ -327,55 +290,37 @@ export class KidService {
           shortDay: getDayNameInWeek(2),
           value: 1,
           timeName: '1h',
-          dateName: moment()
-            .startOf('isoWeek')
-            .add('days', 1)
-            .format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add('days', 1).format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(3),
           value: 1.5,
           timeName: '1h 30 min',
-          dateName: moment()
-            .startOf('isoWeek')
-            .add('days', 2)
-            .format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add('days', 2).format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(4),
           value: 0,
           timeName: '',
-          dateName: moment()
-            .startOf('isoWeek')
-            .add('days', 3)
-            .format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add('days', 3).format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(5),
           value: 3,
           timeName: '3h',
-          dateName: moment()
-            .startOf('isoWeek')
-            .add('days', 4)
-            .format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add('days', 4).format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(6),
           value: 195 / 60,
           timeName: '3h 15 min',
-          dateName: moment()
-            .startOf('isoWeek')
-            .add('days', 5)
-            .format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add('days', 5).format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(7),
           value: 75 / 60,
           timeName: '1h 15 min',
-          dateName: moment()
-            .startOf('isoWeek')
-            .add('days', 6)
-            .format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add('days', 6).format('D MMM YYYY'),
         },
       ];
 
@@ -483,9 +428,7 @@ export class KidService {
       });
 
       const levelTrackingInfos = levels.map((level) => {
-        const levelTracking = levelTrackings.find(
-          (item) => item.curriculumLevelId.toString() === level.toString(),
-        );
+        const levelTracking = levelTrackings.find((item) => item.curriculumLevelId.toString() === level.toString());
 
         return {
           _id: level._id,
@@ -504,8 +447,7 @@ export class KidService {
         for (let index = 0; index < lessons.length; index++) {
           const lesson = lessons[index];
           const lessonTracking = lessonTrackings.find(
-            (item) =>
-              item.curriculumLessonId.toString() === lesson._id.toString(),
+            (item) => item.curriculumLessonId.toString() === lesson._id.toString(),
           );
 
           result.push({
@@ -523,26 +465,18 @@ export class KidService {
           for (let index = 0; index < lessons.length; index++) {
             const lesson = lessons[index];
             const lessonTracking = lessonTrackings.find(
-              (item) =>
-                item.curriculumLessonId.toString() === lesson._id.toString(),
+              (item) => item.curriculumLessonId.toString() === lesson._id.toString(),
             );
 
             result.push({
               _id: lesson._id,
               name: lesson.name,
-              status:
-                lessonTracking?.status ||
-                (index === completedIndex + 1
-                  ? Status.INPROGRESS
-                  : Status.UPCOMING),
+              status: lessonTracking?.status || (index === completedIndex + 1 ? Status.INPROGRESS : Status.UPCOMING),
               order: lesson.order,
               level: levelId,
             });
 
-            if (
-              !!lessonTracking &&
-              lessonTracking.status === Status.COMPLETED
-            ) {
+            if (!!lessonTracking && lessonTracking.status === Status.COMPLETED) {
               completedIndex = index;
             }
           }
@@ -580,18 +514,11 @@ export class KidService {
   }
 
   getCurrentPart(lessonTracking: CurriculumLessonTrackingDocument) {
-    if (
-      lessonTracking.status === Status.COMPLETED ||
-      lessonTracking.introduction.status === Status.INPROGRESS
-    ) {
+    if (lessonTracking.status === Status.COMPLETED || lessonTracking.introduction.status === Status.INPROGRESS) {
       return 'introduction';
     }
 
-    if (
-      lessonTracking.questions.some(
-        (question) => question.status === Status.INPROGRESS,
-      )
-    ) {
+    if (lessonTracking.questions.some((question) => question.status === Status.INPROGRESS)) {
       return 'question';
     }
 
@@ -646,8 +573,7 @@ export class KidService {
 
     lessonInfo.questions = lesson.questions.map((question) => {
       const questionTracking = questionTrackings.find(
-        (questionTracking) =>
-          questionTracking.questionId.toString() === question._id.toString(),
+        (questionTracking) => questionTracking.questionId.toString() === question._id.toString(),
       );
 
       return {
@@ -669,15 +595,7 @@ export class KidService {
     return lessonInfo;
   }
 
-  async kidLessonInfo({
-    loggedUser,
-    i18n,
-    lessonId,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-    lessonId: string;
-  }) {
+  async kidLessonInfo({ loggedUser, i18n, lessonId }: { loggedUser: LoggedUser; i18n: I18nContext; lessonId: string }) {
     const session = await this.connection.startSession();
 
     try {
@@ -687,15 +605,12 @@ export class KidService {
         throw new Error(i18n.t('error.errorUserExist'));
       }
 
-      const { lesson, lessonTracking } =
-        await this.learningService.verifyAccessLessonAndGetLessonAndLessonTracking(
-          {
-            i18n,
-            lessonId: new Types.ObjectId(lessonId),
-            kid,
-            session,
-          },
-        );
+      const { lesson, lessonTracking } = await this.learningService.verifyAccessLessonAndGetLessonAndLessonTracking({
+        i18n,
+        lessonId: new Types.ObjectId(lessonId),
+        kid,
+        session,
+      });
 
       const lessonInfo = this.combineLessonAndTracking({
         lesson,
@@ -704,7 +619,7 @@ export class KidService {
 
       await session.commitTransaction();
 
-      return lessonInfo;
+      return await lessonInfo;
     } catch (error) {
       console.log(error.message);
       await session.abortTransaction();
@@ -728,9 +643,7 @@ export class KidService {
     try {
       const parent = await this.parentModel.findOne({ user: loggedUser.id });
 
-      const kid = await this.kidModel
-        .findOne({ _id: kidId })
-        .select('+hashPassword +salt');
+      const kid = await this.kidModel.findOne({ _id: kidId }).select('+hashPassword +salt');
 
       if (!kid) {
         throw new BadRequestException(i18n.t('error.kidNotFound'));
@@ -740,9 +653,7 @@ export class KidService {
         throw new Error(i18n.t('error.UnauthorizedAccess'));
       }
 
-      const kidUser = await this.userModel
-        .findById(kid.userId)
-        .select('+hashPassword +salt');
+      const kidUser = await this.userModel.findById(kid.userId).select('+hashPassword +salt');
 
       kidUser.password = newPassword;
 
@@ -798,9 +709,7 @@ export class KidService {
         child.avatar = avatar;
       }
 
-      const kidUser = await this.userModel
-        .findById(child.userId)
-        .select('+hashPassword +salt ');
+      const kidUser = await this.userModel.findById(child.userId).select('+hashPassword +salt ');
 
       if (password) {
         kidUser.password = password;
@@ -823,24 +732,14 @@ export class KidService {
     }
   }
 
-  async delete({
-    kidId,
-    i18n,
-    loggedUser,
-  }: {
-    i18n: I18nContext;
-    loggedUser: LoggedUser;
-    kidId: string;
-  }) {
+  async delete({ kidId, i18n, loggedUser }: { i18n: I18nContext; loggedUser: LoggedUser; kidId: string }) {
     let child: KidDocument;
     const parent = await this.parentModel.findOne({ userId: loggedUser.id });
     const session = await this.connection.startSession();
 
     try {
       session.startTransaction();
-      child = await this.kidModel
-        .findOne({ _id: kidId, parentId: parent._id })
-        .session(session);
+      child = await this.kidModel.findOne({ _id: kidId, parentId: parent._id }).session(session);
 
       if (!child) {
         throw new Error(i18n.t('error.kidNotFound'));
@@ -854,9 +753,7 @@ export class KidService {
 
       await this.kidModel.deleteOne({ _id: child._id }).session(session);
 
-      parent.kidIds = parent.kidIds.filter(
-        (kidId) => kidId.toString() !== child._id.toString(),
-      );
+      parent.kidIds = parent.kidIds.filter((kidId) => kidId.toString() !== child._id.toString());
 
       parent.watchingKidId = parent.kidIds[0];
 

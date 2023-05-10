@@ -1,7 +1,5 @@
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
-import { RestCurrentUser } from './module/auth/decorator/loggedUser.decorator';
-import { LoggedUser } from './module/auth/passport/auth.type';
 import { Request, Response } from 'express';
 
 @Controller()
@@ -9,7 +7,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  getHello(@RestCurrentUser() user: LoggedUser) {
+  getHello() {
     return this.appService.getHello();
   }
 

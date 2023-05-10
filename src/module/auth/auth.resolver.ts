@@ -156,7 +156,7 @@ export class AuthResolver {
     platform: string,
     @I18n() i18n: I18nContext,
   ) {
-    return await this.authService.login({
+    return this.authService.login({
       password,
       username,
       deviceId,

@@ -1,10 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, {
-  CallbackWithoutResultAndOptionalError,
-  HydratedDocument,
-  SaveOptions,
-  Types,
-} from 'mongoose';
+import mongoose, { CallbackWithoutResultAndOptionalError, HydratedDocument, SaveOptions, Types } from 'mongoose';
 import { User } from './user.schema';
 import { Type } from 'class-transformer';
 import { Parent } from './parent.schema';
@@ -65,8 +60,7 @@ export class Kid {
   gender?: string;
 
   @Prop({
-    default:
-      'https://d2csac8bc0t9gj.cloudfront.net/publics/students/default-avatar.png',
+    default: 'https://d2csac8bc0t9gj.cloudfront.net/publics/students/default-avatar.png',
   })
   avatar?: string;
 
@@ -180,21 +174,15 @@ KidSchema.pre('findOneAndUpdate', async function (next) {
   return next();
 });
 
-KidSchema.pre(
-  'save',
-  async function (
-    next: CallbackWithoutResultAndOptionalError,
-    options: SaveOptions,
-  ) {
-    console.log('hook create >>>>');
+KidSchema.pre('save', async function (next: CallbackWithoutResultAndOptionalError, options: SaveOptions) {
+  console.log('hook create >>>>');
 
-    const appContext = await NestFactory.createApplicationContext(AppModule, {
-      logger: false,
-    });
-    const kidLogService = appContext.get(KidLogService);
+  const appContext = await NestFactory.createApplicationContext(AppModule, {
+    logger: false,
+  });
+  const kidLogService = appContext.get(KidLogService);
 
-    const self: any = this as any;
-    await kidLogService.doCreate({ self, options });
-    return next();
-  },
-);
+  const self: any = this as any;
+  await kidLogService.doCreate({ self, options });
+  return next();
+});

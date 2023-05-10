@@ -9,15 +9,6 @@ import { UploadModule } from './upload/upload.module';
 import { HomeModule } from './home/home.module';
 
 @Module({
-  imports: [
-    AuthModule,
-    DatabaseModule,
-    HomeModule,
-    UserModule,
-    KidModule,
-    ParentModule,
-    LearningModule,
-    UploadModule,
-  ],
+  imports: [AuthModule, DatabaseModule, HomeModule, UserModule, KidModule, ParentModule, LearningModule, UploadModule],
 })
 export class RootModule {}

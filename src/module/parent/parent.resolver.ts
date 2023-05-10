@@ -1,15 +1,12 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ParentService } from './parent.service';
-import {
-  SuccessObjectType,
-  PaymentCardObjectType,
-} from './objectTYpe/paymentCard.objectType';
+import { SuccessObjectType, PaymentCardObjectType } from './objectTYpe/paymentCard.objectType';
 import { UserRole } from 'src/common/enum';
 import { AuthGql } from '../auth/decorator/auth.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { GraphqlCurrentUser } from '../auth/decorator/loggedUser.decorator';
 import { LoggedUser } from '../auth/passport/auth.type';
-import { InvoiceObjectType } from './objectTYpe/invoice.objectTypee';
+import { InvoiceObjectType } from './objectTYpe/invoice.objectType';
 import { KidsByManager } from '../kid/objectType/kidsByManager.objectType';
 import { MEMBER_TYPE } from 'src/common/constant';
 import { BadRequestException } from '@nestjs/common';
@@ -26,10 +23,7 @@ export class ParentResolver {
     @GraphqlCurrentUser() user: LoggedUser,
     @Args('lang', { nullable: true }) lang?: string,
   ) {
-    console.log(
-      '🚀 ~ file: parent.resolver.ts:30 ~ ParentResolver ~ lang:',
-      lang,
-    );
+    console.log('🚀 ~ file: parent.resolver.ts:30 ~ ParentResolver ~ lang:', lang);
     return this.parentService.paymentCards({ loggedUser: user, i18n });
   }
 
@@ -40,10 +34,7 @@ export class ParentResolver {
     @GraphqlCurrentUser() user: LoggedUser,
     @Args('lang', { nullable: true }) lang?: string,
   ) {
-    console.log(
-      '🚀 ~ file: parent.resolver.ts:44 ~ ParentResolver ~ lang:',
-      lang,
-    );
+    console.log('🚀 ~ file: parent.resolver.ts:44 ~ ParentResolver ~ lang:', lang);
     return this.parentService.listInvoice({ loggedUser: user, i18n });
   }
 
@@ -140,10 +131,7 @@ export class ParentResolver {
     @GraphqlCurrentUser() loggedUser: LoggedUser,
     @Args('lang', { nullable: true }) lang?: string,
   ) {
-    console.log(
-      '🚀 ~ file: parent.resolver.ts:134 ~ ParentResolver ~ lang:',
-      lang,
-    );
+    console.log('🚀 ~ file: parent.resolver.ts:134 ~ ParentResolver ~ lang:', lang);
     return this.parentService.cancelSubscriptionPlan({
       i18n,
       loggedUser,

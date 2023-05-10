@@ -7,8 +7,6 @@ import { JwtStrategy } from './passport/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailModule } from '../email/email.module';
 import { StripeModule } from '../payment/stripe/stripe.module';
-import { GraphJWTGuard } from './guard/graph.jwt.guard';
-import { RestJWTGuard } from './guard/rest.jwt.guard';
 
 @Global()
 @Module({
@@ -26,13 +24,7 @@ import { RestJWTGuard } from './guard/rest.jwt.guard';
     EmailModule,
     StripeModule,
   ],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    AuthResolver,
-    // GraphJWTGuard,
-    // RestJWTGuard,
-  ],
+  providers: [AuthService, JwtStrategy, AuthResolver],
   exports: [JwtModule, PassportModule, AuthService],
 })
 export class AuthModule {}

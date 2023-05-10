@@ -3,8 +3,7 @@ import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 import { Status } from 'src/common/enum';
 
-export type CurriculumLevelTrackingDocument =
-  HydratedDocument<CurriculumLevelTracking>;
+export type CurriculumLevelTrackingDocument = HydratedDocument<CurriculumLevelTracking>;
 
 export type CurriculumLevelTrackingLeanDoc = CurriculumLevelTracking & {
   _id: Types.ObjectId;
@@ -47,8 +46,6 @@ export class CurriculumLevelTracking {
   updatedAt?: Date;
 }
 
-export const CurriculumLevelTrackingSchema = SchemaFactory.createForClass(
-  CurriculumLevelTracking,
-);
+export const CurriculumLevelTrackingSchema = SchemaFactory.createForClass(CurriculumLevelTracking);
 
 CurriculumLevelTrackingSchema.loadClass(CurriculumLevelTracking);

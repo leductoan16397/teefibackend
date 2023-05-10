@@ -1,9 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UploadService } from './upload.service';
-import {
-  UploadObjectType,
-  UploadsObjectType,
-} from './objectType/upload.objectType';
+import { UploadObjectType, UploadsObjectType } from './objectType/upload.objectType';
 import { AuthGql } from '../auth/decorator/auth.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { GraphqlCurrentUser } from '../auth/decorator/loggedUser.decorator';

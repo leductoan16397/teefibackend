@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  Req,
-  Res,
-  UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Post, Req, Res, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { AuthRest } from '../auth/decorator/auth.decorator';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
@@ -77,9 +69,7 @@ export class UploadController {
       const promisesResult = await Promise.allSettled(promises);
 
       const urls =
-        promisesResult
-          .filter((item) => item.status === 'fulfilled')
-          .map((item) => (item as any).value) || [];
+        promisesResult.filter((item) => item.status === 'fulfilled').map((item) => (item as any).value) || [];
 
       return res.send({
         urls,

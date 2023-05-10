@@ -30,11 +30,7 @@ export class UploadService {
 
     if (fileType.includes('image')) return `${rootFolder}/image`;
 
-    if (
-      fileType.includes('text') ||
-      fileType.includes('epub') ||
-      fileType.includes('document')
-    ) {
+    if (fileType.includes('text') || fileType.includes('epub') || fileType.includes('document')) {
       return `${rootFolder}/text`;
     }
 
@@ -49,10 +45,7 @@ export class UploadService {
     const bucket = process.env.AWS_BUCKET || 'devteefi';
 
     const folderName = this.getFolderByFileType(mimetype);
-    const key = `${folderName}/${new Date().getTime()}_${filename.replace(
-      / /g,
-      '',
-    )}`;
+    const key = `${folderName}/${new Date().getTime()}_${filename.replace(/ /g, '')}`;
 
     await this.s3Service.putObject({
       Bucket: bucket,
@@ -72,15 +65,7 @@ export class UploadService {
     return `${process.env.AWS_CLOUD_FRONT_URL}/${key}`;
   }
 
-  async uploadFile({
-    file,
-    loggedUser,
-    i18n,
-  }: {
-    file: FileUpload;
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async uploadFile({ file, loggedUser, i18n }: { file: FileUpload; loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       const user = await this.userModel.findById(loggedUser.id);
 
@@ -102,15 +87,7 @@ export class UploadService {
     }
   }
 
-  async uploadFiles({
-    files,
-    loggedUser,
-    i18n,
-  }: {
-    files: FileUpload[];
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async uploadFiles({ files, loggedUser, i18n }: { files: FileUpload[]; loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       const fileCount = files.length;
 
@@ -123,9 +100,7 @@ export class UploadService {
       const promisesResult = await Promise.allSettled(promises);
 
       const urls =
-        promisesResult
-          .filter((item) => item.status === 'fulfilled')
-          .map((item) => (item as any).value) || [];
+        promisesResult.filter((item) => item.status === 'fulfilled').map((item) => (item as any).value) || [];
 
       return {
         urls,

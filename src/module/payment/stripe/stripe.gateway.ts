@@ -43,8 +43,7 @@ export class StripeGateway extends GatewayAbstract {
     billingSettings: any;
   }) {
     const productId = params.membership.stripeProductId;
-    const intervalType =
-      params.membership.key === MEMBER_TYPE.monthly ? 'month' : 'year';
+    const intervalType = params.membership.key === MEMBER_TYPE.monthly ? 'month' : 'year';
     try {
       const amount = params.membership.totalPrice * 100;
       const currency = 'usd';
@@ -78,9 +77,7 @@ export class StripeGateway extends GatewayAbstract {
       if (!invoice) {
         throw new Error('No invoice found (2)');
       }
-      const stripeInvoice = await this.invoiceStripeService.retrieve(
-        invoice.partnerInvoiceId,
-      );
+      const stripeInvoice = await this.invoiceStripeService.retrieve(invoice.partnerInvoiceId);
       if (!stripeInvoice) {
         throw new Error('No invoice found (3)');
       }
@@ -92,9 +89,7 @@ export class StripeGateway extends GatewayAbstract {
       const checkExist = await this.s3Service.checkFileExist(fileUrl);
 
       if (checkExist) {
-        const s3FileUrl = `${this.configService.get<string>(
-          'AWS_CLOUD_FRONT_URL',
-        )}/${fileUrl}`;
+        const s3FileUrl = `${this.configService.get<string>('AWS_CLOUD_FRONT_URL')}/${fileUrl}`;
 
         return {
           success: true,
@@ -103,9 +98,7 @@ export class StripeGateway extends GatewayAbstract {
       } else {
         const cusId = stripeInvoice.customer;
 
-        const parent = await this.parentModel
-          .findOne({ stripeCusId: cusId })
-          .lean();
+        const parent = await this.parentModel.findOne({ stripeCusId: cusId }).lean();
 
         const invoicePeriod = {
           start: moment.unix(stripeInvoice.lines.data[0].period.start),
@@ -118,11 +111,9 @@ export class StripeGateway extends GatewayAbstract {
 
         const amount = `$${stripeInvoice.total / 100}`;
 
-        const invoiceInfo = `${id} · ${amount} due ${invoicePeriod.start.format(
-          'MMMM',
-        )} ${invoicePeriod.start.format('DD')}, ${invoicePeriod.start.format(
-          'YYYY',
-        )}`;
+        const invoiceInfo = `${id} · ${amount} due ${invoicePeriod.start.format('MMMM')} ${invoicePeriod.start.format(
+          'DD',
+        )}, ${invoicePeriod.start.format('YYYY')}`;
 
         let productName = '',
           membershipName = '';
@@ -139,38 +130,26 @@ export class StripeGateway extends GatewayAbstract {
           productName = membershipName;
         }
 
-        const productDuration = `${invoicePeriod.start.format(
-          'MMM',
-        )} ${invoicePeriod.start.format('DD')} - ${invoicePeriod.end.format(
-          'MMM',
-        )} ${invoicePeriod.end.format('DD')}, ${invoicePeriod.end.format(
-          'YYYY',
-        )}`;
+        const productDuration = `${invoicePeriod.start.format('MMM')} ${invoicePeriod.start.format(
+          'DD',
+        )} - ${invoicePeriod.end.format('MMM')} ${invoicePeriod.end.format('DD')}, ${invoicePeriod.end.format('YYYY')}`;
 
-        const date = `${invoicePeriod.start.format(
-          'MMM',
-        )} ${invoicePeriod.start.format('DD')}, ${invoicePeriod.start.format(
-          'YYYY',
-        )}`;
+        const date = `${invoicePeriod.start.format('MMM')} ${invoicePeriod.start.format(
+          'DD',
+        )}, ${invoicePeriod.start.format('YYYY')}`;
 
         const stripeInvoiceCreated = moment.unix(stripeInvoice.created);
 
-        const dateOfIssue = `${stripeInvoiceCreated.format(
-          'MMM',
-        )} ${stripeInvoiceCreated.format('DD')}, ${stripeInvoiceCreated.format(
-          'YYYY',
-        )}`;
+        const dateOfIssue = `${stripeInvoiceCreated.format('MMM')} ${stripeInvoiceCreated.format(
+          'DD',
+        )}, ${stripeInvoiceCreated.format('YYYY')}`;
 
-        const productTitle = `${amount} due ${invoicePeriod.end.format(
-          'MMM',
-        )} ${invoicePeriod.end.format('DD')}, ${invoicePeriod.end.format(
-          'YYYY',
-        )}`;
+        const productTitle = `${amount} due ${invoicePeriod.end.format('MMM')} ${invoicePeriod.end.format(
+          'DD',
+        )}, ${invoicePeriod.end.format('YYYY')}`;
 
         //console.log("stripeInvoice", stripeInvoice);
-        const companyInfo = await this.constantModel
-          .findOne({ key: 'companyInfo' })
-          .lean();
+        const companyInfo = await this.constantModel.findOne({ key: 'companyInfo' }).lean();
 
         const data = {
           invoiceNumber: id,
@@ -178,9 +157,7 @@ export class StripeGateway extends GatewayAbstract {
           companyAddress: companyInfo.value.address,
           //companyPhone: '+8484 4653 353',
           //companyDomain: 'https://www.teefi.io',
-          customerName: parent.lastName
-            ? `${parent.firstName} ${parent.lastName}`
-            : parent.firstName,
+          customerName: parent.lastName ? `${parent.firstName} ${parent.lastName}` : parent.firstName,
           customerEmail: parent.email,
           customerAddress: parent.address,
           invoiceInfo: invoiceInfo,
@@ -208,23 +185,8 @@ export class StripeGateway extends GatewayAbstract {
 
         ensureDirPath(`${process.cwd()}/tmp_data`);
 
-        generatePdf(file, options, async (err, buffer) => {
-          if (err) {
-            throw new Error(err.message);
-          }
-          const url = `${process.cwd()}/tmp_data/${fileName}`;
-
-          writeFileSync(url, buffer);
-
-          const uploadRs = await this.s3Service.uploadLocalFileToS3(
-            url,
-            fileUrl,
-          );
-          return {
-            success: true,
-            url: uploadRs,
-          };
-        });
+        const rs = await this.generatePdf({ file, fileName, fileUrl, options });
+        return rs;
       }
     } catch (ex) {
       console.log('ex', ex.message);
@@ -233,5 +195,25 @@ export class StripeGateway extends GatewayAbstract {
         msg: ex.message,
       };
     }
+  }
+
+  generatePdf({ file, options, fileName, fileUrl }): Promise<{ success: boolean; url: string }> {
+    return new Promise((rs, rj) => {
+      generatePdf(file, options, async (err, buffer) => {
+        if (err) {
+          rj(err);
+        }
+        const url = `${process.cwd()}/tmp_data/${fileName}`;
+
+        writeFileSync(url, buffer);
+
+        const uploadRs = await this.s3Service.uploadLocalFileToS3(url, fileUrl);
+
+        rs({
+          success: true,
+          url: uploadRs,
+        });
+      });
+    });
   }
 }

@@ -6,11 +6,7 @@ import { GraphqlCurrentUser } from '../auth/decorator/loggedUser.decorator';
 import { LoggedUser } from '../auth/passport/auth.type';
 import { LoggedUserType } from './graphQlObjectType/user.ObjectType';
 import { UserRole } from 'src/common/enum';
-import {
-  IsDeletedObjectType,
-  IsUpdatedObjectType,
-  UniqueObjectType,
-} from './graphQlObjectType/common.objectType';
+import { IsDeletedObjectType, IsUpdatedObjectType, UniqueObjectType } from './graphQlObjectType/common.objectType';
 import { GraphQLURL } from '../upload/scalar/url.scalar';
 
 @Resolver(() => LoggedUserType)
@@ -45,10 +41,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UniqueObjectType)
-  async checkUsernameUnique(
-    @I18n() i18n: I18nContext,
-    @Args('username', { nullable: false }) username: string,
-  ) {
+  async checkUsernameUnique(@I18n() i18n: I18nContext, @Args('username', { nullable: false }) username: string) {
     return this.userService.checkUsernameUnique({ i18n, username });
   }
 

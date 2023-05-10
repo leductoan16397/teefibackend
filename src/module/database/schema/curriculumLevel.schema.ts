@@ -45,7 +45,6 @@ export class CurriculumLevel {
   updatedAt?: Date;
 }
 
-export const CurriculumLevelSchema =
-  SchemaFactory.createForClass(CurriculumLevel);
+export const CurriculumLevelSchema = SchemaFactory.createForClass(CurriculumLevel);
 
 CurriculumLevelSchema.loadClass(CurriculumLevel);

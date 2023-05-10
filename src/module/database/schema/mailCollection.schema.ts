@@ -53,7 +53,6 @@ export class MailCollection {
   updatedAt?: Date;
 }
 
-export const MailCollectionSchema =
-  SchemaFactory.createForClass(MailCollection);
+export const MailCollectionSchema = SchemaFactory.createForClass(MailCollection);
 
 MailCollectionSchema.loadClass(MailCollection);

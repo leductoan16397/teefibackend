@@ -38,13 +38,7 @@ export class UserService {
     private readonly subscriptionStripeService: SubscriptionStripeService,
   ) {}
 
-  async getLoggedUserInfo({
-    loggedUser,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async getLoggedUserInfo({ loggedUser, i18n }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       let userInfo: any;
 
@@ -72,9 +66,7 @@ export class UserService {
             throw new BadRequestException(i18n.t('error.userNotFound'));
           }
 
-          const enrollHis = await this.enrollHistoryModel
-            .findOne({ kidId: userInfo._id }, { isRecurring: 1 })
-            .lean();
+          const enrollHis = await this.enrollHistoryModel.findOne({ kidId: userInfo._id }, { isRecurring: 1 }).lean();
 
           userInfo.isRecurring = enrollHis?.isRecurring || 0;
           break;
@@ -127,9 +119,7 @@ export class UserService {
         lastName: userInfo.lastName,
         gender: userInfo.gender,
         memberType: userInfo.memberType,
-        birthday: userInfo.birthday
-          ? moment(userInfo.birthday).format('YYYY-MM-DD')
-          : undefined,
+        birthday: userInfo.birthday ? moment(userInfo.birthday).format('YYYY-MM-DD') : undefined,
         isRecurring: userInfo.isRecurring,
         // TODO: get paymentCard for parent and educator
         // paymentCard: userInfo.paymentCard,
@@ -169,13 +159,7 @@ export class UserService {
     }
   }
 
-  async dashboardAlert({
-    loggedUser,
-    i18n,
-  }: {
-    loggedUser: LoggedUser;
-    i18n: I18nContext;
-  }) {
+  async dashboardAlert({ loggedUser, i18n }: { loggedUser: LoggedUser; i18n: I18nContext }) {
     try {
       let dashboardAlert;
       switch (loggedUser.role) {
@@ -193,8 +177,7 @@ export class UserService {
             return [];
           }
 
-          const randomInt =
-            Math.floor(Math.random() * (value.length - 0 + 1)) + 0;
+          const randomInt = Math.floor(Math.random() * (value.length - 0 + 1)) + 0;
 
           const newMess = value.slice(0, randomInt);
 
@@ -226,7 +209,7 @@ export class UserService {
           const enroll = await this.enrollHistoryModel
             .findOne({ kidId: kid._id })
             .sort({ updatedAt: -1, createdAt: -1 });
-          const expireTime = enroll.expireTime;
+          const expireTime = enroll?.expireTime;
 
           if (expireTime > new Date()) {
             return [value.subscribed];
@@ -246,13 +229,7 @@ export class UserService {
     }
   }
 
-  async checkUsernameUnique({
-    i18n,
-    username,
-  }: {
-    i18n: I18nContext;
-    username: string;
-  }) {
+  async checkUsernameUnique({ i18n, username }: { i18n: I18nContext; username: string }) {
     try {
       const checkExist = await this.userModel.countDocuments({
         username: username.toLowerCase().trim(),
@@ -314,7 +291,7 @@ export class UserService {
       await st.save();
       this.removeOldAvatar(oldAvatar);
 
-      return this.getLoggedUserInfo({ loggedUser, i18n });
+      return await this.getLoggedUserInfo({ loggedUser, i18n });
     } catch (ex) {
       console.log(ex.message);
       throw new DynamicError(ex);
@@ -322,10 +299,7 @@ export class UserService {
   }
 
   removeOldAvatar(oldAvatar: string) {
-    if (
-      typeof oldAvatar !== 'string' ||
-      oldAvatar.includes('publics/students')
-    ) {
+    if (typeof oldAvatar !== 'string' || oldAvatar.includes('publics/students')) {
       return;
     }
 
@@ -352,7 +326,7 @@ export class UserService {
     const parent = await this.parentModel.findOne({ userId: loggedUser.id });
     try {
       session.startTransaction();
-      const feedback = await new this.feedbackModel({
+      await new this.feedbackModel({
         userId: loggedUser.id,
         userType: UserRole.PARENT,
         value: {
@@ -408,10 +382,7 @@ export class UserService {
           if (!enrollHistory) {
             continue;
           }
-          const cancelSubscription =
-            await this.subscriptionStripeService.cancel(
-              enrollHistory.stripeSubscriptionId,
-            );
+          await this.subscriptionStripeService.cancel(enrollHistory.stripeSubscriptionId);
 
           enrollHistory.status = ENROLL_STATUS.cancel;
         }

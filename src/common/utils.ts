@@ -54,9 +54,9 @@ export const getDayNameInWeek = (dayNum: number) => {
 export const getTimeFormat = (input: Date | string | number) => {
   const day = moment(input);
   const dayNameInWeek = getDayNameInWeek(day.isoWeekday());
-  const date = `${day.format('HH:mm')}, ${capitalizeFirstLetter(
-    dayNameInWeek,
-  )} ${day.format('D')} ${day.format('MMM')}, ${day.format('YYYY')} `;
+  const date = `${day.format('HH:mm')}, ${capitalizeFirstLetter(dayNameInWeek)} ${day.format('D')} ${day.format(
+    'MMM',
+  )}, ${day.format('YYYY')} `;
   return date;
 };
 
@@ -68,11 +68,7 @@ export const ensureDirPath = (dirPath: string) => {
   }
 };
 
-export const convertAmountVNDByCurrency = (
-  amount: number,
-  rate: number,
-  currency: string,
-) => {
+export const convertAmountVNDByCurrency = (amount: number, rate: number, currency: string) => {
   switch (currency) {
     case '$':
       amount *= rate;
@@ -113,22 +109,13 @@ export const readableToBuffer = async (readerStream: any) => {
   });
 };
 
-export const uniqueSuffix = () =>
-  Date.now() + '-' + Math.round(Math.random() * 1e9);
+export const uniqueSuffix = () => Date.now() + '-' + Math.round(Math.random() * 1e9);
 
-export const editFileName = (
-  req: Request,
-  file: Express.Multer.File,
-  callback,
-) => {
+export const editFileName = (req: Request, file: Express.Multer.File, callback) => {
   callback(null, `${uniqueSuffix()}.${file.originalname}`);
 };
 
-export const imageFileFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  callback,
-) => {
+export const imageFileFilter = (req: Request, file: Express.Multer.File, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(new Error('Only image files are allowed!'), false);
   }

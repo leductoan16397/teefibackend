@@ -1,12 +1,7 @@
 import { COLLECTION_NAME, MEMBER_TYPE } from 'src/common/constant';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NestFactory } from '@nestjs/core';
-import mongoose, {
-  CallbackWithoutResultAndOptionalError,
-  HydratedDocument,
-  SaveOptions,
-  Types,
-} from 'mongoose';
+import mongoose, { CallbackWithoutResultAndOptionalError, HydratedDocument, SaveOptions, Types } from 'mongoose';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { AppModule } from 'src/app.module';
@@ -94,9 +89,7 @@ export class EnrollHistory {
     let expireTime: string | Moment = startTime ? moment(startTime) : moment();
     switch (type) {
       case MEMBER_TYPE.freeTrial:
-        expireTime = moment()
-          .add(membership.freeTrialDays, 'days')
-          .format('YYYY-MM-DD HH:mm:00');
+        expireTime = moment().add(membership.freeTrialDays, 'days').format('YYYY-MM-DD HH:mm:00');
         break;
       case MEMBER_TYPE.monthly:
         // if(isFirstPay){
@@ -145,21 +138,15 @@ EnrollHistorySchema.pre('findOneAndUpdate', async function (next) {
   return next();
 });
 
-EnrollHistorySchema.pre(
-  'save',
-  async function (
-    next: CallbackWithoutResultAndOptionalError,
-    options: SaveOptions,
-  ) {
-    console.log('hook create >>>>');
+EnrollHistorySchema.pre('save', async function (next: CallbackWithoutResultAndOptionalError, options: SaveOptions) {
+  console.log('hook create >>>>');
 
-    const appContext = await NestFactory.createApplicationContext(AppModule, {
-      logger: false,
-    });
-    const enrollHistoryLogService = appContext.get(EnrollHistoryLogService);
+  const appContext = await NestFactory.createApplicationContext(AppModule, {
+    logger: false,
+  });
+  const enrollHistoryLogService = appContext.get(EnrollHistoryLogService);
 
-    const self: any = this as any;
-    await enrollHistoryLogService.doCreate({ self, options });
-    return next();
-  },
-);
+  const self: any = this as any;
+  await enrollHistoryLogService.doCreate({ self, options });
+  return next();
+});

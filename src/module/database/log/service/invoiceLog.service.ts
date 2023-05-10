@@ -33,12 +33,7 @@ export class InvoiceLogService extends LogDBService {
       //compare activeFor
       result = this.compareChangedData(self, docToUpdate, 'activeFor', result);
       //compare programType
-      result = this.compareChangedData(
-        self,
-        docToUpdate,
-        'programType',
-        result,
-      );
+      result = this.compareChangedData(self, docToUpdate, 'programType', result);
 
       await this.logForUpdate({
         params: {
@@ -58,7 +53,7 @@ export class InvoiceLogService extends LogDBService {
   }
 
   async doCreate({ options, self }: { self; options }) {
-    const { createdBy, createdByUserType, session, enableLog } = options;
+    const { createdBy, createdByUserType, session } = options;
 
     try {
       await this.logForCreate({

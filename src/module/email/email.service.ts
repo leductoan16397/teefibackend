@@ -9,15 +9,7 @@ export class EmailService {
     private readonly paymentInvoiceEmailService: PaymentInvoiceEmailService,
   ) {}
 
-  async sendOtpMail({
-    expireTime,
-    otpCode,
-    email,
-  }: {
-    expireTime: string;
-    otpCode: string | number;
-    email: string;
-  }) {
+  async sendOtpMail({ expireTime, otpCode, email }: { expireTime: string; otpCode: string | number; email: string }) {
     this.otpEmailService.setDynamicData({ expireTime, otpCode });
     await this.otpEmailService.send(email);
   }

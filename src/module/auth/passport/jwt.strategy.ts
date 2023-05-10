@@ -7,10 +7,7 @@ import { TokenPayload } from './auth.type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly authService: AuthService,
-  ) {
+  constructor(private readonly configService: ConfigService, private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromHeader('authorization'),
       secretOrKey: configService.get('SECRET_KEY'),

@@ -8,10 +8,7 @@ import { LoggedUser } from '../auth/passport/auth.type';
 import { KidsByManager } from './objectType/kidsByManager.objectType';
 import { LearningDashboard } from './objectType/learningDashboard.objectType';
 import { LessonData } from './objectType/listLesson.objectType';
-import {
-  SuccessObjectType,
-  UpdatedObjectType,
-} from '../parent/objectTYpe/paymentCard.objectType';
+import { SuccessObjectType, UpdatedObjectType } from '../parent/objectTYpe/paymentCard.objectType';
 import { KidObjectType } from './objectType/kid.objectType';
 import { LessonInfo } from './objectType/lessonInfo.objectype';
 

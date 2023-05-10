@@ -44,10 +44,6 @@ import { InvoiceController } from './invoice.controller';
     CustomerChargeSucceeded,
     CustomerSubscriptionCreated,
   ],
-  controllers: [
-    PaymentController,
-    PaymentMobileStatusController,
-    InvoiceController,
-  ],
+  controllers: [PaymentController, PaymentMobileStatusController, InvoiceController],
 })
 export class StripeModule {}

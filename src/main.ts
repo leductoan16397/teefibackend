@@ -5,22 +5,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import * as compression from 'compression';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestApplication>(
-    AppModule,
-    // new ExpressAdapter({
-    //   trustProxy: true,
-    //   bodyLimit: 52428800,
-    //   maxParamLength: 5000,
-    // }),
-    {
-      rawBody: true,
-      bodyParser: true,
-    },
-  );
+  const app = await NestFactory.create<NestApplication>(AppModule, {
+    rawBody: true,
+    bodyParser: true,
+  });
   const configService = app.get(ConfigService);
 
   app.useGlobalPipes(new ValidationPipe());
@@ -30,17 +21,9 @@ async function bootstrap() {
       crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
-          imgSrc: [
-            `'self'`,
-            'data:',
-            'https: data:',
-            'apollo-server-landing-page.cdn.apollographql.com',
-          ],
+          imgSrc: [`'self'`, 'data:', 'https: data:', 'apollo-server-landing-page.cdn.apollographql.com'],
           scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-          manifestSrc: [
-            `'self'`,
-            'apollo-server-landing-page.cdn.apollographql.com',
-          ],
+          manifestSrc: [`'self'`, 'apollo-server-landing-page.cdn.apollographql.com'],
           frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
         },
       },

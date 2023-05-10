@@ -126,7 +126,6 @@ export class CurriculumLesson {
   updatedAt?: Date;
 }
 
-export const CurriculumLessonSchema =
-  SchemaFactory.createForClass(CurriculumLesson);
+export const CurriculumLessonSchema = SchemaFactory.createForClass(CurriculumLesson);
 
 CurriculumLessonSchema.loadClass(CurriculumLesson);

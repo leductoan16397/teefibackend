@@ -39,13 +39,7 @@ export abstract class LogDBService {
     return result;
   }
 
-  async logForUpdate({
-    params,
-    session,
-  }: {
-    params: LogParam;
-    session?: ClientSession | null;
-  }) {
+  async logForUpdate({ params, session }: { params: LogParam; session?: ClientSession | null }) {
     if (Object.keys(params.compareResult).length) {
       const subAction = [];
       for (const i in params.compareResult) {
@@ -64,13 +58,7 @@ export abstract class LogDBService {
     }
   }
 
-  async logForCreate({
-    params,
-    session,
-  }: {
-    params: LogParam;
-    session?: ClientSession | null;
-  }) {
+  async logForCreate({ params, session }: { params: LogParam; session?: ClientSession | null }) {
     const logData: EventLog = {
       modelName: this.modelName,
       action: params.action,
@@ -82,13 +70,7 @@ export abstract class LogDBService {
     await new this.EventLogModel(logData).save({ session });
   }
 
-  async logForRemove({
-    params,
-    session,
-  }: {
-    params: LogParam;
-    session?: ClientSession | null;
-  }) {
+  async logForRemove({ params, session }: { params: LogParam; session?: ClientSession | null }) {
     const logData: EventLog = {
       modelName: this.modelName,
       action: params.action,

@@ -8,10 +8,7 @@ import { IList, IRetrieve } from '../../interface/crud.interface';
 import { PaymentCard } from 'src/module/database/schema/paymentCard.schema';
 
 @Injectable()
-export class PaymentMethodStripeService
-  extends StripeAbstract
-  implements IRetrieve, IList
-{
+export class PaymentMethodStripeService extends StripeAbstract implements IRetrieve, IList {
   constructor(
     @InjectModel(PaymentCard.name)
     private readonly paymentCartModel: Model<PaymentCard>,
@@ -57,11 +54,7 @@ export class PaymentMethodStripeService
     }
   }
 
-  async checkAndAddCard(params: {
-    paymentMethodId: string;
-    userId: Types.ObjectId | string;
-    userType: string;
-  }) {
+  async checkAndAddCard(params: { paymentMethodId: string; userId: Types.ObjectId | string; userType: string }) {
     const pMethod = await this.retrieve(params.paymentMethodId);
     if (!pMethod) {
       return false;
