@@ -159,7 +159,6 @@ export class StripeGateway extends GatewayAbstract {
           //companyDomain: 'https://www.teefi.io',
           customerName: parent.lastName ? `${parent.firstName} ${parent.lastName}` : parent.firstName,
           customerEmail: parent.email,
-          customerAddress: parent.address,
           invoiceInfo: invoiceInfo,
           amount: amount,
           total: amount,
@@ -171,6 +170,10 @@ export class StripeGateway extends GatewayAbstract {
           productTitle: productTitle,
           dateOfIssue: dateOfIssue,
         };
+
+        if (!!parent.address) {
+          data['customerAddress'] = parent.address;
+        }
 
         console.log('data', data);
         const urlData = new URLSearchParams(data).toString();

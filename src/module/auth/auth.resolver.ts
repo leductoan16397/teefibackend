@@ -158,7 +158,7 @@ export class AuthResolver {
   ) {
     return this.authService.login({
       password,
-      username,
+      username: username.toLowerCase().trim(),
       deviceId,
       fcmToken,
       platform,
