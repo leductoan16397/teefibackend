@@ -280,7 +280,7 @@ export class LearningService {
 
   async increaseKidBalance({ earning, kid, session }: { earning: number; kid: KidDocument; session: ClientSession }) {
     if (!earning || earning === 0 || !lodash.isNumber(earning)) {
-      throw new InternalServerErrorException('earning must be a number');
+      return;
     }
 
     const balance = kid.balance + earning;
