@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
+import { uniqueValidator } from 'src/common/schema.utils';
 
 export type BlockOTPDocument = HydratedDocument<BlockOTP>;
 
@@ -19,7 +20,7 @@ export type BlockOTPLeanDoc = BlockOTP & {
   },
 })
 export class BlockOTP {
-  @Prop({ unique: true })
+  @Prop({ validate: uniqueValidator })
   email: string;
 
   @Prop({ default: 0 })

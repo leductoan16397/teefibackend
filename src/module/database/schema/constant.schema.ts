@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
+import { uniqueValidator } from 'src/common/schema.utils';
 
 export type ConstantDocument = HydratedDocument<Constant>;
 
@@ -19,7 +20,7 @@ export type ConstantLeanDoc = Constant & {
   },
 })
 export class Constant {
-  @Prop({ unique: true })
+  @Prop({ validate: uniqueValidator })
   key: string;
 
   @Prop({ type: Object })

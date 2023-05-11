@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, ObjectId, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 import { User } from './user.schema';
 import { UserRole } from 'src/common/enum';
+import { uniqueValidator } from 'src/common/schema.utils';
 
 export type AppPushTokenDocument = HydratedDocument<AppPushToken>;
 
@@ -22,13 +23,13 @@ export type AppPushTokenLeanDoc = AppPushToken & {
 })
 export class AppPushToken {
   @Prop({
-    unique: true,
+    validate: uniqueValidator,
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     immutable: true,
     ref: User.name,
   })
-  userId: ObjectId;
+  userId: Types.ObjectId;
 
   @Prop({ enum: UserRole })
   userType: UserRole;

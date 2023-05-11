@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
+import { uniqueValidator } from 'src/common/schema.utils';
 
 export type OtpCodeDocument = HydratedDocument<OtpCode>;
 
@@ -22,7 +23,7 @@ export class OtpCode {
   @Prop({ default: '' })
   type: string;
 
-  @Prop({ unique: true })
+  @Prop({ validate: uniqueValidator })
   email: string;
 
   @Prop({ default: '' })

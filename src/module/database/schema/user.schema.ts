@@ -8,6 +8,7 @@ import { COLLECTION_NAME } from 'src/common/constant';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { UserLogService } from 'src/module/database/log/service/userLog.service';
+import { uniqueValidator } from 'src/common/schema.utils';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -30,6 +31,7 @@ export class User {
     required: true,
     immutable: true,
     index: 'asc',
+    validate: uniqueValidator,
   })
   username: string;
 

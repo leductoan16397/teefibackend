@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
+import { uniqueValidator } from 'src/common/schema.utils';
 
 export type CurriculumLevelDocument = HydratedDocument<CurriculumLevel>;
 
@@ -19,7 +20,10 @@ export type CurriculumLevelLeanDoc = CurriculumLevel & {
   },
 })
 export class CurriculumLevel {
-  @Prop({ unique: true, required: true })
+  @Prop({
+    validate: uniqueValidator,
+    required: true,
+  })
   key: string;
 
   @Prop({ required: true })
