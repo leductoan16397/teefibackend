@@ -26,8 +26,8 @@ type AnswerInfo {
 }
 
 type BalanceDetail {
-  balance: String
-  rate: Int
+  balance: Float
+  rate: Float
 }
 
 type ContentDescription {
@@ -51,7 +51,7 @@ type DeleteUserType {
 }
 
 type EarningDetail {
-  balance: String
+  balance: Float
   investments: BalanceDetail
   sharing: BalanceDetail
   spending: BalanceDetail
@@ -68,8 +68,8 @@ type FinanciallySmartGenerationTitle {
 }
 
 type GameInfo {
-  earned: Int
-  earning: Int
+  earned: Float
+  earning: Float
   src: String
   status: String
 }
@@ -98,8 +98,8 @@ type HomeType {
 }
 
 type IntroductionInfo {
-  earned: Int
-  earning: Int
+  earned: Float
+  earning: Float
   src: Source
   status: String
 }
@@ -132,7 +132,7 @@ type KidType {
   _id: String
   address: String
   avatar: String
-  balance: Int
+  balance: Float
   birthday: String
   country: String
   firstName: String
@@ -150,7 +150,7 @@ type KidsByManager {
 
 type LeaderBoard {
   avatar: String
-  balance: Int
+  balance: Float
   childId: String
   name: String
 }
@@ -375,8 +375,8 @@ type QuestionInfo {
   _id: String
   answerKey: String
   answers: [AnswerInfo]
-  earned: Int
-  earning: Int
+  earned: Float
+  earning: Float
   order: Int
   question: String
   status: String
@@ -451,12 +451,12 @@ type Source {
 }
 
 type SubmitLesson {
-  earned: Int
+  earned: Float
   rightAnswerId: String
   rightAnswerKey: String
   success: Boolean
-  totalEarnedLevel: Int
-  totalEarnedQuiz: Int
+  totalEarnedLevel: Float
+  totalEarnedQuiz: Float
 }
 
 """Submit Lesson Types"""
@@ -474,7 +474,7 @@ type SuccessObjectType {
 type Summary {
   completedLessons: Int
   dayInTraining: Int
-  earning: String
+  earning: Float
 }
 
 """URL scalar type"""

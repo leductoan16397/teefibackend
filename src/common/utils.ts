@@ -39,13 +39,13 @@ export const getDayNameInWeek = (dayNum: number) => {
   }
 
   const dayInWeek = {
-    '1': 'mon',
-    '2': 'tue',
-    '3': 'wed',
-    '4': 'thurs',
-    '5': 'fri',
-    '6': 'sat',
-    '7': 'sun',
+    '1': 'Mon',
+    '2': 'Tue',
+    '3': 'Wed',
+    '4': 'Thurs',
+    '5': 'Fri',
+    '6': 'Sat',
+    '7': 'Sun',
   };
 
   return dayInWeek[dayNum];

@@ -294,11 +294,11 @@ export class LearningService {
     earning = parseInt(earning as string);
     const balance = kid.balance + earning;
 
-    const investmentBalance = kid.asset.investment.balance + (earning * kid.asset.investment.ratio) / 100;
+    const investmentBalance = kid.asset.investment.balance + earning * kid.asset.investment.ratio;
 
-    const spendingBalance = kid.asset.spending.balance + (earning * kid.asset.spending.ratio) / 100;
+    const spendingBalance = kid.asset.spending.balance + earning * kid.asset.spending.ratio;
 
-    const sharingBalance = kid.asset.sharing.balance + (earning * kid.asset.sharing.ratio) / 100;
+    const sharingBalance = kid.asset.sharing.balance + earning * kid.asset.sharing.ratio;
 
     await this.kidModel.updateOne(
       { _id: kid._id },

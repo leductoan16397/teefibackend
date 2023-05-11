@@ -16,7 +16,7 @@ export type KidLeanDoc = Kid & {
 
 @Schema({ _id: false })
 class Asset {
-  @Prop({ default: 30 })
+  @Prop({})
   ratio: number;
 
   @Prop({ default: 0 })
@@ -27,13 +27,28 @@ const AssetSchema = SchemaFactory.createForClass(Asset);
 
 @Schema({ _id: false })
 class KidAsset {
-  @Prop({ type: AssetSchema, default: {} })
+  @Prop({
+    type: AssetSchema,
+    default: {
+      ratio: 0.3,
+    },
+  })
   investment: Asset;
 
-  @Prop({ type: AssetSchema, default: {} })
+  @Prop({
+    type: AssetSchema,
+    default: {
+      ratio: 0.6,
+    },
+  })
   spending: Asset;
 
-  @Prop({ type: AssetSchema, default: {} })
+  @Prop({
+    type: AssetSchema,
+    default: {
+      ratio: 0.1,
+    },
+  })
   sharing: Asset;
 }
 
@@ -84,20 +99,7 @@ export class Kid {
 
   @Prop({
     type: KidAssetSchema,
-    default: {
-      // investment: {
-      //   ratio: 30,
-      //   balance: 0,
-      // },
-      // spending: {
-      //   ratio: 60,
-      //   balance: 0,
-      // },
-      // sharing: {
-      //   ratio: 10,
-      //   balance: 0,
-      // },
-    },
+    default: {},
   })
   asset: KidAsset;
 

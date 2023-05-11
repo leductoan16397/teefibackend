@@ -29,14 +29,14 @@ class LeaderBoard {
   @Field(() => String, { nullable: true })
   avatar?: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   balance?: number;
 }
 
 @ObjectType()
 class Summary {
-  @Field(() => String, { nullable: true })
-  earning?: string;
+  @Field(() => Number, { nullable: true })
+  earning?: number;
 
   @Field(() => Int, { nullable: true })
   dayInTraining?: number;
@@ -47,17 +47,17 @@ class Summary {
 
 @ObjectType()
 class BalanceDetail {
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   rate?: number;
 
-  @Field(() => String, { nullable: true })
-  balance?: string;
+  @Field(() => Number, { nullable: true })
+  balance?: number;
 }
 
 @ObjectType()
 class EarningDetail {
-  @Field(() => String, { nullable: true })
-  balance?: string;
+  @Field(() => Number, { nullable: true })
+  balance?: number;
 
   @Field(() => BalanceDetail, { nullable: true })
   investments: BalanceDetail;

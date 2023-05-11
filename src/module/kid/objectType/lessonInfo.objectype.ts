@@ -2,13 +2,13 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 class BaseInfo {
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   earning?: number;
 
   @Field(() => String, { nullable: true })
   status?: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   earned?: number;
 }
 

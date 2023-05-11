@@ -23,7 +23,7 @@ class KidType {
   @Field(() => String, { nullable: true })
   birthday?: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   balance?: number;
 
   @Field(() => String, { nullable: true })

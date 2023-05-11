@@ -2,13 +2,13 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class SubmitLesson {
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   earned: number;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   totalEarnedQuiz: number;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Number, { nullable: true })
   totalEarnedLevel: number;
 
   @Field(() => Boolean, { nullable: true })
