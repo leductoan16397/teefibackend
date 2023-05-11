@@ -290,37 +290,37 @@ export class KidService {
           shortDay: getDayNameInWeek(2),
           value: 1,
           timeName: '1h',
-          dateName: moment().startOf('isoWeek').add('days', 1).format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add(1, 'days').format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(3),
           value: 1.5,
           timeName: '1h 30 min',
-          dateName: moment().startOf('isoWeek').add('days', 2).format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add(2, 'days').format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(4),
           value: 0,
           timeName: '',
-          dateName: moment().startOf('isoWeek').add('days', 3).format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add(3, 'days').format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(5),
           value: 3,
           timeName: '3h',
-          dateName: moment().startOf('isoWeek').add('days', 4).format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add(4, 'days').format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(6),
           value: 195 / 60,
           timeName: '3h 15 min',
-          dateName: moment().startOf('isoWeek').add('days', 5).format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add(5, 'days').format('D MMM YYYY'),
         },
         {
           shortDay: getDayNameInWeek(7),
           value: 75 / 60,
           timeName: '1h 15 min',
-          dateName: moment().startOf('isoWeek').add('days', 6).format('D MMM YYYY'),
+          dateName: moment().startOf('isoWeek').add(6, 'days').format('D MMM YYYY'),
         },
       ];
 
