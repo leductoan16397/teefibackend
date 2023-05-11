@@ -20,7 +20,7 @@ export type MailCollectionLeanDoc = MailCollection & {
   },
 })
 export class MailCollection {
-  @Prop({ unique: true })
+  @Prop({})
   email: string;
 
   @Prop({})

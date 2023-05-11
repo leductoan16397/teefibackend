@@ -63,9 +63,5 @@ import { LoggingPlugin } from './common/apolloLogging.service';
 export class AppModule implements OnModuleInit {
   async onModuleInit() {
     mongoose.set('debug', true);
-    await mongoose.connection.db.admin().command({
-      setParameter: 1,
-      maxTransactionLockRequestTimeoutMillis: 5000,
-    });
   }
 }
