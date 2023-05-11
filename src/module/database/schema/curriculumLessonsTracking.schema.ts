@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { COLLECTION_NAME } from 'src/common/constant';
 import { Status } from 'src/common/enum';
+import { convertNumberToFloat } from 'src/common/utils';
 
 export type CurriculumLessonTrackingDocument = HydratedDocument<CurriculumLessonTracking>;
 
@@ -14,7 +15,10 @@ class IntroTracking {
   @Prop({ enum: Status })
   status: Status;
 
-  @Prop({ min: 0 })
+  @Prop({
+    min: 0,
+    set: convertNumberToFloat,
+  })
   earned: number;
 }
 const IntroTrackingSchema = SchemaFactory.createForClass(IntroTracking);
@@ -27,7 +31,10 @@ class GameTracking {
   @Prop({ min: 0 })
   score: number;
 
-  @Prop({ min: 0 })
+  @Prop({
+    min: 0,
+    set: convertNumberToFloat,
+  })
   earned: number;
 }
 const GameTrackingSchema = SchemaFactory.createForClass(GameTracking);
@@ -40,7 +47,10 @@ export class QuestionTracking {
   })
   questionId: Types.ObjectId;
 
-  @Prop({ min: 0 })
+  @Prop({
+    min: 0,
+    set: convertNumberToFloat,
+  })
   earned: number;
 
   @Prop({})

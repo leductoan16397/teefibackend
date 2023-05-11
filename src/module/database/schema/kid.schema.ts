@@ -7,6 +7,7 @@ import { COLLECTION_NAME } from 'src/common/constant';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { KidLogService } from '../log/service/kidLog.service';
+import { convertNumberToFloat } from 'src/common/utils';
 
 export type KidDocument = HydratedDocument<Kid>;
 
@@ -19,7 +20,10 @@ class Asset {
   @Prop({})
   ratio: number;
 
-  @Prop({ default: 0 })
+  @Prop({
+    default: 0,
+    set: convertNumberToFloat,
+  })
   balance: number;
 }
 
@@ -94,7 +98,13 @@ export class Kid {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ default: 0 })
+  @Prop({
+    default: 0,
+    set: (value: number) => {
+      const float = parseFloat(value.toFixed(2));
+      return float;
+    },
+  })
   balance: number;
 
   @Prop({

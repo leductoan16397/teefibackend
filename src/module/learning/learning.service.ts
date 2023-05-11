@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { LoggedUser } from '../auth/passport/auth.type';
 import { I18nContext } from 'nestjs-i18n';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
@@ -278,20 +278,11 @@ export class LearningService {
     }
   }
 
-  async increaseKidBalance({
-    earning,
-    kid,
-    session,
-  }: {
-    earning: string | number;
-    kid: KidDocument;
-    session: ClientSession;
-  }) {
-    if (!earning || earning === 0 || !lodash.isInteger(earning)) {
-      return;
+  async increaseKidBalance({ earning, kid, session }: { earning: number; kid: KidDocument; session: ClientSession }) {
+    if (!earning || earning === 0 || !lodash.isNumber(earning)) {
+      throw new InternalServerErrorException('earning must be a number');
     }
 
-    earning = parseInt(earning as string);
     const balance = kid.balance + earning;
 
     const investmentBalance = kid.asset.investment.balance + earning * kid.asset.investment.ratio;
@@ -562,7 +553,7 @@ export class LearningService {
     if (lessonTracking.game.status === Status.INPROGRESS) {
       // update game status to completed, add earned
       lessonTracking.game.status = Status.COMPLETED;
-      lessonTracking.game.earned = (lesson.game.earning * score) / 100;
+      lessonTracking.game.earned = ((lesson.game.earning * score) / 100)?.toFixed(2);
 
       // update lessonTracking to completed
       lessonTracking.status = Status.COMPLETED;

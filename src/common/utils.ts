@@ -121,3 +121,8 @@ export const imageFileFilter = (req: Request, file: Express.Multer.File, callbac
   }
   callback(null, true);
 };
+
+export const convertNumberToFloat = (value: number) => {
+  const float = parseFloat(value.toFixed(2));
+  return float;
+};
