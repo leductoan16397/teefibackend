@@ -18,8 +18,6 @@ export const encodePassword = async (password: string, salt: string) => {
   });
   const configService = appContext.get(ConfigService);
 
-  console.log(configService.get('SECRET_KEY'));
-
   const hash = createHmac('sha256', configService.get('SECRET_KEY'))
     .update(password + salt)
     .digest('hex');

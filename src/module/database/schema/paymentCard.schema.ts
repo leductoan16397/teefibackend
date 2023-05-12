@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
-import { COLLECTION_NAME } from 'src/common/constant';
+import { COLLECTION_NAME, ENV } from 'src/common/constant';
 import { UserRole } from 'src/common/enum';
 import { uniqueValidator } from 'src/common/schema.utils';
 
@@ -9,6 +9,8 @@ export type PaymentCardDocument = HydratedDocument<PaymentCard>;
 export type PaymentCardLeanDoc = PaymentCard & {
   _id: Types.ObjectId;
 };
+
+const fingerprintValidateOptions = process.env.NODE_ENV === ENV.prod ? { validate: uniqueValidator } : {};
 
 @Schema({
   collection: COLLECTION_NAME.PAYMENT_CARD,
@@ -32,7 +34,7 @@ export class PaymentCard {
   @Prop({ enum: UserRole })
   userType: UserRole;
 
-  @Prop({ validate: uniqueValidator })
+  @Prop({ ...fingerprintValidateOptions })
   fingerprint: string;
 
   @Prop({ type: Object })
