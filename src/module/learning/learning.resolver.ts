@@ -59,7 +59,6 @@ export class LearningResolver {
       type,
       questionId,
       answerKey,
-      score,
     });
   }
 }

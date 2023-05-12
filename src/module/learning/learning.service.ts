@@ -541,19 +541,15 @@ export class LearningService {
     };
   }
 
-  async submitGame({ i18n, session, kid, lessonTracking, lesson, score }) {
+  async submitGame({ i18n, session, kid, lessonTracking, lesson }) {
     if (lessonTracking.story.status !== Status.COMPLETED) {
       throw new BadRequestException(i18n.t('error.completePreviousPartFirst'));
-    }
-
-    if (!score) {
-      throw new BadRequestException(i18n.t('error.missingField', { fieldName: 'score' }));
     }
 
     if (lessonTracking.game.status === Status.INPROGRESS) {
       // update game status to completed, add earned
       lessonTracking.game.status = Status.COMPLETED;
-      lessonTracking.game.earned = (lesson.game.earning * score) / 100;
+      lessonTracking.game.earned = lesson.game.earning;
       // update lessonTracking to completed
       lessonTracking.status = Status.COMPLETED;
 
@@ -607,7 +603,6 @@ export class LearningService {
     type,
     questionId,
     answerKey,
-    score,
   }: {
     i18n: I18nContext;
     loggedUser: LoggedUser;
@@ -615,7 +610,6 @@ export class LearningService {
     type: SubmitLessonEnum;
     questionId?: string;
     answerKey?: string;
-    score?: number;
   }) {
     const session = await this.connection.startSession();
 
@@ -674,7 +668,6 @@ export class LearningService {
             lessonTracking,
             kid,
             lesson,
-            score,
           });
           break;
         }
