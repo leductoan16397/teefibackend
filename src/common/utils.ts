@@ -7,6 +7,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 
 import { Request } from 'express';
+import * as lodash from 'lodash';
 
 export const generateSalt = () => {
   return randomBytes(10).toString('hex');
@@ -120,7 +121,11 @@ export const imageFileFilter = (req: Request, file: Express.Multer.File, callbac
   callback(null, true);
 };
 
-export const convertNumberToFloat = (value: number) => {
-  const float = parseFloat(value.toFixed(2));
+export const convertNumberToFloat = (value: string | number) => {
+  if (!lodash.isNumber(+value)) {
+    return;
+  }
+
+  const float = parseFloat((+value).toFixed(2));
   return float;
 };

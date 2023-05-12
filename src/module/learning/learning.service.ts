@@ -553,8 +553,7 @@ export class LearningService {
     if (lessonTracking.game.status === Status.INPROGRESS) {
       // update game status to completed, add earned
       lessonTracking.game.status = Status.COMPLETED;
-      lessonTracking.game.earned = ((lesson.game.earning * score) / 100)?.toFixed(2);
-
+      lessonTracking.game.earned = (lesson.game.earning * score) / 100;
       // update lessonTracking to completed
       lessonTracking.status = Status.COMPLETED;
 

@@ -100,10 +100,7 @@ export class Kid {
 
   @Prop({
     default: 0,
-    set: (value: number) => {
-      const float = parseFloat(value.toFixed(2));
-      return float;
-    },
+    set: convertNumberToFloat,
   })
   balance: number;
 
