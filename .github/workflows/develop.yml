@@ -1,8 +1,8 @@
-name: github-action-runner
+name: develop-action
 on:
   push:
     branches:
-      - github-action
+      - develop
 
 jobs:
   Install:
@@ -16,11 +16,13 @@ jobs:
         node-version: [18]
     steps:
       - uses: actions/checkout@v3
-
+          
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          cache-dependency-path: subdir/yarn.lock
           
       - name: Eslint test
         run: yarn lint:check
