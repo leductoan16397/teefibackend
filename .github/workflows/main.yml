@@ -6,7 +6,7 @@ on:
 
 jobs:
   Install:
-    uses: ./.github/workflows/install.yml@main
+    uses: ./.github/workflows/install.yml
 
   lint:
     runs-on: ubuntu-latest
