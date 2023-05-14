@@ -1,7 +1,7 @@
 on: workflow_call
 
 jobs:
-  Install:
+  Install-Test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,3 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn
+      
+      - name: Eslint test
+        run: yarn lint:check
