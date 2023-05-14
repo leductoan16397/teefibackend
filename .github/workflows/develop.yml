@@ -1,9 +1,9 @@
-name: main
+name: github-action-runner
 run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
 on:
   push:
     branches:
-      - main
+      - github-action
 
 jobs:
   Install:
