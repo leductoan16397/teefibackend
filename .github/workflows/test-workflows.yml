@@ -13,12 +13,17 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          cache-dependency-path: subdir/yarn.lock      
+#           cache-dependency-path: subdir/yarn.lock      
+          cache-dependency-path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
 
       - name: Install dependencies
         run: yarn
