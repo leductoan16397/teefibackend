@@ -1,4 +1,3 @@
-name: Install
 on: workflow_call
 
 jobs:
