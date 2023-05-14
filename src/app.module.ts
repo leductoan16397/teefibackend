@@ -21,9 +21,14 @@ import { LoggingPlugin } from './common/apolloLogging.service';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        return {
+          uri: configService.get<string>('MONGODB_URI'),
+          autoIndex: true,
+          compressors: ['zstd', 'zlib', 'snappy'],
+          zlibCompressionLevel: 9,
+        };
+      },
       inject: [ConfigService],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({

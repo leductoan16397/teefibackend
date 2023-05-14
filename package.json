@@ -13,6 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -22,6 +23,7 @@
   "dependencies": {
     "@apollo/server": "^4.7.1",
     "@aws-sdk/client-s3": "^3.325.0",
+    "@mongodb-js/zstd": "^1.1.0",
     "@nestjs/apollo": "^11.0.5",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
@@ -53,6 +55,7 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "snappy": "^7.2.2",
     "stripe": "^12.3.0",
     "validator": "^13.9.0"
   },
