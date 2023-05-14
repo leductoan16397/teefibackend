@@ -1,4 +1,4 @@
-name: develop-action
+name: develop
 on:
   push:
     branches:
