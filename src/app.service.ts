@@ -17,6 +17,7 @@ export class AppService {
     // @InjectModel(MailCollection.name)
     // private readonly mailCollectionModel: Model<MailCollection>,
   ) {}
+    console.log("🚀 ~ file: app.service.ts:20 ~ AppService ~ userModel:", userModel)
 
   getHello(): string {
     return 'Hello World!';
