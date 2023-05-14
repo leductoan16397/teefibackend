@@ -1,3 +1,4 @@
+name: Testing
 on: workflow_call
 
 jobs:
@@ -8,16 +9,16 @@ jobs:
         node-version: [18]
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Install Yarn
+        run: npm install -g yarn
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          cache-dependency-path: subdir/yarn.lock
-
-      - name: Install Yarn
-        run: npm install -g yarn
+          cache-dependency-path: subdir/yarn.lock      
 
       - name: Install dependencies
         run: yarn
