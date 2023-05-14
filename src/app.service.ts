@@ -20,6 +20,8 @@ export class AppService {
 
   getHello(): string {
     console.log('getHello');
+    console.log('getHello');
+    console.log('getHello');
 
     return 'Hello World!';
   }
