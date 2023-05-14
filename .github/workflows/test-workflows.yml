@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-#           cache-dependency-path: subdir/yarn.lock      
+          cache-dependency-path: yarn.lock      
 #           cache-dependency-path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
 
       - name: Install dependencies
