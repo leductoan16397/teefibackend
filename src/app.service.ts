@@ -14,13 +14,13 @@ export class AppService {
     @InjectModel(Parent.name) private readonly parentModel: Model<Parent>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
 
-    // @InjectModel(MailCollection.name)
-    // private readonly mailCollectionModel: Model<MailCollection>,
+    @InjectModel(MailCollection.name)
+    private readonly mailCollectionModel: Model<MailCollection>,
   ) {}
-    console.log("🚀 ~ file: app.service.ts:20 ~ AppService ~ userModel:", userModel)
-    console.log("🚀 ~ file: app.service.ts:20 ~ AppService ~ userModel:", userModel)
 
   getHello(): string {
+    console.log('getHello');
+
     return 'Hello World!';
   }
 
