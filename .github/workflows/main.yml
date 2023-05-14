@@ -6,7 +6,7 @@ on:
 
 jobs:
   Install:
-    uses: TeeFuture/teefibackend/.github/workflows/install.yml@main
+    uses: ./.github/workflows/install.yml@main
 
   lint:
     runs-on: ubuntu-latest
