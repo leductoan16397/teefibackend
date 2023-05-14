@@ -1,0 +1,20 @@
+name: github-action-runner
+run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+on:
+  push:
+    branches:
+      - github-action
+
+jobs:
+  Install:
+    uses: TeeFuture/teefibackend/.github/workflows/install.yml@main
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: Install
+    strategy:
+      matrix:
+        node-version: [18]
+    steps:
+      - name: Eslint test
+        run: yarn lint:check
